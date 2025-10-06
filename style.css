@@ -68,8 +68,10 @@ nav, .navbar, #navbar {
 .nav-links {
   display: flex;
   gap: 2rem;
-  align-items: center;           /* vertically center links */
+  align-items: center;     
+  list-style: none;      /* vertically center links */
 }
+.nav-links li { list-style: none; }
 
 .nav-link {
   color: white;                  /* white over transparent navbar */
@@ -88,7 +90,7 @@ nav, .navbar, #navbar {
   transform: translateX(-50%);
   width: 0;
   height: 3px;
-  background: var(--accent, #5b8c75);
+  background: white;
   border-radius: 2px;
   transition: width 0.3s ease;
 }
@@ -110,9 +112,10 @@ nav, .navbar, #navbar {
 .mobile-menu-toggle span {
   width: 25px;
   height: 3px;
-  background: white;   /* visible on transparent navbar */
+  background: var(--dark);   /* visible on transparent navbar */
   border-radius: 2px;
   transition: all 0.3s ease;
+  z-index: 1002;
 }
 
 .mobile-menu-toggle.open span:nth-child(1) {
