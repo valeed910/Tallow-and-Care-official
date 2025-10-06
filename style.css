@@ -246,25 +246,21 @@ html {
   object-fit: cover; /* desktop: fill container */
   z-index: -1;
 }
-
 @media (max-width: 768px) {
   .hero {
-    aspect-ratio: 16 / 9;
-    height: auto;
+    height: 100vh;          /* keep full screen height */
   }
 
   .hero-bg-video {
-    object-fit: contain; /* mobile: show full video */
-    background: black;   /* fill borders */
+    object-fit: cover;       /* cover entire screen */
+    width: 100%;
+    height: 100%;
   }
 
   .hero-content {
     grid-template-columns: 1fr;
     text-align: center;
-  }
-
-  .hero-text p {
-    max-width: 100%;
+    padding: 3rem 1rem;
   }
 }
 
