@@ -417,6 +417,31 @@ backToTop.addEventListener('click', e => {
     };
   }
 
+//   Feedback
+document.getElementById("feedbackForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const messageBox = document.getElementById("feedbackMessage");
+  messageBox.classList.remove("hidden");
+  messageBox.style.opacity = "0";
+
+  // Fade-in effect
+  setTimeout(() => {
+    messageBox.style.opacity = "1";
+  }, 50);
+
+  // Reset form
+  this.reset();
+
+  // Auto-hide after 4s
+  setTimeout(() => {
+    messageBox.style.opacity = "0";
+    setTimeout(() => messageBox.classList.add("hidden"), 400);
+  }, 4000);
+});
+
+
+
   /* -------------------------
      Notify form handler
      ------------------------- */
