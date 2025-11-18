@@ -332,6 +332,100 @@ backToTop.addEventListener('click', e => {
     typingObserver.observe(typingText);
   }
 
+  // ===================== Testimonials Auto-Slider =====================
+document.addEventListener('DOMContentLoaded', () => {
+  const testimonials = [
+    {
+      text: "Tallow & Care healed my Labrador's dry patches in a week. Natural and safe — I trust this brand now.",
+      author: "— Riya S., Bareilly",
+      img: "/testimonial-avatar-1.jpg"
+    },
+    {
+      text: "Amazing shine and no more itching. Vet recommended, and my dog loves the smell (gentle, not overpowering).",
+      author: "— Arjun V., Lucknow",
+      img: "/testimonial-avatar-2.jpg"
+    },
+    {
+      text: "Finally a product that's planet-friendly and pet-safe. Love their mission — will definitely buy again.",
+      author: "— Sneha G., Delhi",
+      img: "/testimonial-avatar-3.jpg"
+    }
+  ];
+
+  let idx = 0;
+  const intervalMs = 4000;
+  let timer = null;
+  const textEl = document.getElementById('testimonialText');
+  const authorEl = document.getElementById('testimonialAuthor');
+  const avatarEl = document.querySelector('.testimonial-avatar');
+  const dotsContainer = document.getElementById('testimonialDots');
+  const wrap = document.getElementById('testimonialsWrap');
+  const prevBtn = document.getElementById('prevTestimonial');
+  const nextBtn = document.getElementById('nextTestimonial');
+
+  // build dots
+  testimonials.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'dot';
+    d.setAttribute('aria-label', `Show testimonial ${i+1}`);
+    d.setAttribute('role', 'tab');
+    d.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(d);
+  });
+  const dots = Array.from(dotsContainer.children);
+
+  function render(i, animate=true) {
+    // animate out
+    const slide = document.getElementById('testimonialSlide');
+    if (animate) slide.classList.add('fade-out');
+    setTimeout(() => {
+      const t = testimonials[i];
+      textEl.textContent = t.text;
+      authorEl.textContent = t.author;
+      if (avatarEl && t.img) { avatarEl.src = t.img; avatarEl.style.display = ''; }
+      dots.forEach(dot => dot.classList.remove('active'));
+      if (dots[i]) dots[i].classList.add('active');
+      if (animate) slide.classList.remove('fade-out');
+    }, animate ? 220 : 0);
+  }
+
+  function next() { idx = (idx + 1) % testimonials.length; render(idx); }
+  function prev() { idx = (idx - 1 + testimonials.length) % testimonials.length; render(idx); }
+  function goTo(i) { idx = i; render(idx); resetTimer(); }
+
+  // autoplay
+  function startTimer() {
+    stopTimer();
+    timer = setInterval(next, intervalMs);
+  }
+  function stopTimer() {
+    if (timer) { clearInterval(timer); timer = null; }
+  }
+  function resetTimer() { stopTimer(); startTimer(); }
+
+  // pause on hover / focus (accessibility)
+  wrap.addEventListener('mouseenter', stopTimer);
+  wrap.addEventListener('mouseleave', startTimer);
+  wrap.addEventListener('focusin', stopTimer);
+  wrap.addEventListener('focusout', startTimer);
+
+  // button events
+  prevBtn.addEventListener('click', () => { prev(); resetTimer(); });
+  nextBtn.addEventListener('click', () => { next(); resetTimer(); });
+
+  // keyboard support: left / right
+  document.addEventListener('keydown', (e) => {
+    if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
+    if (e.key === 'ArrowLeft') { prev(); resetTimer(); }
+    if (e.key === 'ArrowRight') { next(); resetTimer(); }
+  });
+
+  // initial render & start
+  render(0, false);
+  startTimer();
+});
+
+
   /* -------------------------
      Contact form validation & submit (handleContact referenced in HTML)
      ------------------------- */
@@ -509,3 +603,4 @@ const revealOnScroll = () => {
 };
 window.addEventListener('scroll', revealOnScroll);
 window.addEventListener('load', revealOnScroll);
+
