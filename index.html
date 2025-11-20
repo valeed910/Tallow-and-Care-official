@@ -265,7 +265,7 @@
 </section>
 
     <!-- Sustainability Section -->
-    <section class="section sustainability reveal">
+    <section id="sustainability" class="section sustainability reveal">
 
     
     <div class="container">
@@ -352,34 +352,8 @@
         
 </section>
 
-<!-- ===================== Testimonials ===================== -->
-<section id="testimonials" class="section testimonials reveal" aria-label="Customer testimonials">
-  <div class="container">
-    <h2 class="testimonial-title">What Pet Owners Say</h2>
-
-    <div class="testimonials-wrap" id="testimonialsWrap" aria-live="polite">
-      <div class="testimonial-slide" id="testimonialSlide">
-        <img src="/testimonial-avatar-1.jpg" alt="Riya Sharma" class="testimonial-avatar" onerror="this.style.display='none'">
-        <blockquote class="testimonial-text" id="testimonialText">Loading testimonial…</blockquote>
-        <cite class="testimonial-author" id="testimonialAuthor"></cite>
-      </div>
-    </div>
-
-    <div class="testimonial-controls">
-      <div id="testimonialDots" class="testimonial-dots" role="tablist" aria-label="Testimonials pagination"></div>
-      <div class="testimonial-actions">
-        <button id="prevTestimonial" class="testimonial-btn" aria-label="Previous testimonial">Prev</button>
-        <button id="nextTestimonial" class="testimonial-btn" aria-label="Next testimonial">Next</button>
-      </div>
-    </div>
-
-    <div class="testimonial-note">Want to share your story? <a href="#contact">Send feedback</a> — we’d love to hear it.</div>
-  </div>
-</section>
-<!-- ===================== /Testimonials ===================== -->
-    
 <!-- contact form -->
-    <section id="contact" class="section contact reveal">
+<section id="contact" class="section contact reveal">
   <div class="container">
     <h2>Connect With Us</h2>
     <p class="contact-subtitle">Ready to give your pets the natural care they deserve? Get in touch!</p>
@@ -423,34 +397,55 @@
         <label for="message">Tell us about your pet's needs...</label>
         <div class="error-message" id="message-error"></div>
       </div>
-
       <button type="submit" class="btn btn-primary">
         <span class="btn-text">Send Message</span>
         <div class="loading"></div>
       </button>
     </form>
   </div>
-  <div class="feedback-card">
-  <h3 class="feedback-title">💬 Share Your Feedback</h3>
 
-  <form action="https://formspree.io/f/YOUR_ID" method="POST" id="feedbackForm" class="feedback-form">
-    <div class="input-group">
-      <input type="text" id="name" name="name" placeholder="Your Name" required>
+<!-- ===================== Testimonials ===================== -->
+<section id="testimonials" class="section testimonials reveal" aria-label="Customer testimonials">
+  <div class="container">
+    <h2 class="testimonial-title">What Pet Owners Say</h2>
+    <div class="testimonials-wrap" id="testimonialsWrap" aria-live="polite">
+      <div class="testimonial-slide" id="testimonialSlide">
+        <img src="/testimonial-avatar-1.jpg" alt="Riya Sharma" class="testimonial-avatar" onerror="this.style.display='none'">
+        <blockquote class="testimonial-text" id="testimonialText">Loading testimonial…</blockquote>
+        <cite class="testimonial-author" id="testimonialAuthor"></cite>
+      </div>
     </div>
-    <div class="input-group">
-      <input type="email" id="email" name="email" placeholder="Your Email" required>
+    <div class="testimonial-controls">
+      <div id="testimonialDots" class="testimonial-dots" role="tablist" aria-label="Testimonials pagination"></div>
+      <div class="testimonial-actions">
+        <button id="prevTestimonial" class="testimonial-btn" aria-label="Previous testimonial">Prev</button>
+        <button id="nextTestimonial" class="testimonial-btn" aria-label="Next testimonial">Next</button>
+      </div>
     </div>
-    <div class="input-group">
-      <textarea id="feedback" name="feedback" rows="4" placeholder="Write your feedback here..." required></textarea>
-    </div>
-    <button type="submit" class="btn-submit">Send Feedback</button>
-  </form>
-
-  <div id="feedbackMessage" class="feedback-message hidden">
-    <p>✨ Thanks for your feedback! We’ll get back soon.</p>
+    <div class="testimonial-note">Want to share your story? <a href="#feedbackForm" class="scroll-to-feedback">Send feedback</a> — we’d love to hear it.</div>
   </div>
-</div>
+</section>
 
+
+<!-- ===================== Feedback ===================== -->
+  <div class="feedback-card">
+    <h3 class="feedback-title">💬 Share Your Feedback</h3>
+    <form action="https://formspree.io/f/YOUR_ID" method="POST" id="feedbackForm" class="feedback-form">
+      <div class="input-group">
+        <input type="text" id="name" name="name" placeholder="Your Name" required>
+      </div>
+      <div class="input-group">
+        <input type="email" id="email" name="email" placeholder="Your Email" required>
+      </div>
+      <div class="input-group">
+        <textarea id="feedback" name="feedback" rows="4" placeholder="Write your feedback here..." required></textarea>
+      </div>
+      <button type="submit" class="btn-submit">Send Feedback</button>
+    </form>
+    <div id="feedbackMessage" class="feedback-message hidden">
+      <p>✨ Thanks for your feedback! We’ll get back soon.</p>
+    </div>
+  </div>
 </section>
 
 <footer>
@@ -464,10 +459,10 @@
     <!-- Company -->
     <div class="footer-section company-section" data-animate>
       <h3>Company</h3>
-      <p><a href="#">About Us</a></p>
-      <p><a href="#">Our Mission</a></p>
-      <p><a href="#">Sustainability</a></p>
-      <p><a href="#">Partnerships</a></p>
+      <p><a href="#home">About Us</a></p>
+      <p><a href="#mission">Our Mission</a></p>
+      <p><a href="#sustainability">Sustainability</a></p>
+      <p><a href="#contact">Partnerships</a></p>
     </div>
 
     <!-- Contact -->
@@ -510,4 +505,3 @@
 </body>
 </html>
         
-
