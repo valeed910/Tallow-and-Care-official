@@ -404,25 +404,45 @@
     </form>
   </div>
 
-<!-- ===================== Testimonials ===================== -->
-<section id="testimonials" class="section testimonials reveal" aria-label="Customer testimonials">
-  <div class="container">
-    <h2 class="testimonial-title">What Pet Owners Say</h2>
-    <div class="testimonials-wrap" id="testimonialsWrap" aria-live="polite">
-      <div class="testimonial-slide" id="testimonialSlide">
-        <img src="/testimonial-avatar-1.jpg" alt="Riya Sharma" class="testimonial-avatar" onerror="this.style.display='none'">
-        <blockquote class="testimonial-text" id="testimonialText">Loading testimonial…</blockquote>
-        <cite class="testimonial-author" id="testimonialAuthor"></cite>
+<!-- Testimonials -->
+<section id="testimonials" aria-label="Customer testimonials">
+  <div class="tc-container">
+    <div class="carousel" data-autoplay="true" data-interval="5000">
+      <div class="slides">
+        <figure class="slide is-active" aria-hidden="false">
+          <img class="avatar" src="/mnt/data/1a40d1e9-6d2e-4519-9a4a-857d02e7ce22.png" alt="Nishtha — Pet owner">
+          <blockquote class="quote">
+            <p>Superb product — my dog’s coat felt softer in one wash. Smells mild, gentle and vet-safe.</p>
+            <figcaption class="author">— Nishtha, Pet owner</figcaption>
+          </blockquote>
+        </figure>
+
+        <figure class="slide" aria-hidden="true">
+          <img class="avatar" src="/mnt/data/1a40d1e9-6d2e-4519-9a4a-857d02e7ce22.png" alt=" Amaan — Pet owner">
+          <blockquote class="quote">
+            <p> feedback 2</p>
+            <figcaption class="author">— Amaan, Pet owner</figcaption>
+          </blockquote>
+        </figure>
+
+        <figure class="slide" aria-hidden="true">
+          <img class="avatar" src="/mnt/data/1a40d1e9-6d2e-4519-9a4a-857d02e7ce22.png" alt="Riya — Pet owner">
+          <blockquote class="quote">
+            <p>Feedback 3</p>
+            <figcaption class="author">— Riya, Pet owner</figcaption>
+          </blockquote>
+        </figure>
+      </div>
+
+      <!-- Controls (dots centered, nav on right) -->
+      <div class="controls" role="tablist" aria-label="Testimonial controls">
+        <div class="dots" id="testimonialDots"></div>
+        <div class="nav">
+          <button class="btn prev" aria-label="Previous testimonial">‹</button>
+          <button class="btn next" aria-label="Next testimonial">›</button>
+        </div>
       </div>
     </div>
-    <div class="testimonial-controls">
-      <div id="testimonialDots" class="testimonial-dots" role="tablist" aria-label="Testimonials pagination"></div>
-      <div class="testimonial-actions">
-        <button id="prevTestimonial" class="testimonial-btn" aria-label="Previous testimonial">Prev</button>
-        <button id="nextTestimonial" class="testimonial-btn" aria-label="Next testimonial">Next</button>
-      </div>
-    </div>
-    <div class="testimonial-note">Want to share your story? <a href="#feedbackForm" class="scroll-to-feedback">Send feedback</a> — we’d love to hear it.</div>
   </div>
 </section>
 
