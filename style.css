@@ -301,9 +301,10 @@ html {
   transform:translateY(0); 
 }
 
-@keyframes fadeInUp { to { 
-  opacity:1; 
-  transform: translateY(0); 
+@keyframes fadeInUp { 
+  to { 
+    opacity:1; 
+    transform: translateY(0); 
   } 
 }
 
@@ -383,10 +384,9 @@ html {
 
 .card-back {
   background: linear-gradient(90deg, #ffffff 0%, #ffffff 100%);
-
-    color: #2d5016;
-    transform: rotateY(180deg);
-    overflow-y: auto;
+  color: #2d5016;
+  transform: rotateY(180deg);
+  overflow-y: auto;
 }
 
 .benefit-icon {
@@ -846,7 +846,8 @@ html {
 
 .sustainability-grid{ 
   display:grid; 
-  grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:26px; 
+  grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); 
+  gap:26px; 
 }
 
 .sustainability-item{ 
@@ -905,7 +906,7 @@ html {
 
 .impact-metric {
   background: rgba(127,176,105,0.08);
-  padding: 12pxm;
+  padding: 12px;
   border-radius: 14px;
   text-align: center;
   transition: transform .3s ease, background .3s ease;
@@ -944,119 +945,203 @@ html {
    Testimonials — focused CSS
    ========================= */
 
-#testimonials { padding: 56px 0; }
+:root {
+  --t-accent: var(--accent, #7fb069);
+  --t-dark: var(--dark, #2d5016);
+  --t-muted: #6b7b66;
+  --t-card-radius: 20px;
+  --t-max-w: 840px;
+  --t-dot-size: 12px;
+  --t-shadow-soft: 0 10px 24px rgba(19,25,18,0.06);
+}
 
-#testimonials .container {
-  max-width: 600px; /* <- adjust this to match your page's testimonial container width */
+/* wrapper */
+#testimonials { 
+  padding: 40px 16px; 
+  background: transparent; 
+}
+
+/* container */
+.tc-container { 
+  max-width: var(--t-max-w); 
+  margin: 0 auto; 
+  padding: 0 1rem; 
+  box-sizing: border-box; 
+}
+
+/* carousel shell */
+.carousel {
+  max-width: 800px;
   margin: 0 auto;
-  padding: 0 1.25rem;
+  background: linear-gradient(180deg, #f7fcf7 0%, #edf7ee 100%);
+  border-radius: var(--t-card-radius);
+  padding: 18px;
+  border: 1px solid rgba(45,80,22,0.06);
+  box-shadow: var(--t-shadow-soft);
+  position: relative;
+  overflow: visible;
+}
+
+/* slides viewport */
+.slides {
+  position: relative;
+  width: 100%;
+  min-height: 120px;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 6px 8px;
+}
+
+/* stacked slides */
+.slide {
+  position: absolute;
+  inset: 0; 
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 14px;
+  opacity: 0;
+  transform: translateY(6px) scale(.998);
+  transition: opacity 320ms ease, transform 320ms cubic-bezier(.2,.9,.25,1);
+  pointer-events: none;
   box-sizing: border-box;
 }
 
-/* Slide box */
-.testimonial-slide {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
-  border: 1px solid rgba(255,255,255,0.04);
-  padding: 26px;
-  border-radius: 100px;
-  box-shadow: 0 8px 18px rgba(2,6,23,0.45);
-  display: flex;
-  gap: 18px;
-  align-items: center;
+/* active visible slide */
+.slide.is-active {
+  position: relative;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
 }
 
-/* Avatar */
-.testimonial-avatar {
-  width: 72px;
-  height: 72px;
+/* avatar */
+.avatar {
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
-  border: 2px solid rgba(255,255,255,0.06);
+  border: 2px solid rgba(45,80,22,0.06);
+  box-shadow: 0 6px 18px rgba(23,28,20,0.06);
 }
 
-/* Quote text */
-.testimonial-text {
-  color: var(--dark,#2d5016);
-  font-size: 1.05rem;
-  line-height: 1.5;
-  margin: 0;
-  flex: 1;
+/* quote text */
+.quote { 
+  color: var(--t-dark); 
+  margin: 0; 
+  font-weight: 500; 
+  line-height: 1.6; 
+  display: flex; 
+  flex-direction: column; 
 }
-.testimonial-text::before { content: open-quote; margin-right: 6px; font-size: 1.3rem; opacity: 0.6; vertical-align: middle; }
-
-.testimonial-author {
-  display: block;
-  margin-top: 10px;
-  color: black;
-  font-size: 0.95rem;
+.quote p { 
+  margin: 0; 
+  font-size: 1.03rem; 
+}
+.author { 
+  margin-top: 8px; 
+  color: var(--t-muted); 
+  font-weight: 700; 
+  font-size: 0.92rem; 
 }
 
-/* ===== Controls container (GRID) - center dots, keep actions right ===== */
-.testimonial-controls {
-  display: grid;
-  grid-template-columns: 1fr auto;   /* flexible left column for dots + fixed right column for buttons */
+/* controls row */
+.controls {
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  width: 100%;
-  max-width: 600px;                  /* <-- CHANGE TO MATCH #testimonials .container max-width */
-  margin: 16px auto 0;
-  padding: 0;                         /* remove horizontal padding to avoid visual offset */
-  box-sizing: border-box;
+  margin-top: 14px;
 }
 
-/* Dots centered in the flexible column */
-.testimonial-dots {
-  grid-column: 1 / 2;
-  justify-self: center;              /* centers the dots inside the controls area */
+/* dots centered */
+.dots {
   display: flex;
   gap: 10px;
+  justify-content: center;
   align-items: center;
+  flex: 1;
 }
 
-/* Actions anchored to the right column */
-.testimonial-actions {
-  grid-column: 1 / 3;
-  justify-self: end;
-  display: flex;
-  gap: 8px;
-  flex: 0 0 auto;
-}
-
-/* Dot styles */
-.testimonial-dots .dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 100%;
-  background: #2d5016;
-  border: 1px solid #2d5016;
-  cursor: pointer;
-  transition: transform .18s ease, box-shadow .18s ease;
-  outline: none;
-}
-.testimonial-dots .dot.active {
-  background: var(--accent, #7fb069);
-  box-shadow: 0 0 0 4px rgba(127,176,105,0.12);
-  transform: scale(1.25);
-}
-
-/* Prev/Next buttons */
-.testimonial-actions .testimonial-btn {
+/* dot visuals */
+.dot {
+  width: var(--t-dot-size);
+  height: var(--t-dot-size);
+  border-radius: 50%;
+  border: 2px solid rgba(45,80,22,0.14);
   background: transparent;
-  border: 1px solid rgba(45,80,22,0.08);
-  padding: 8px 12px;
-  border-radius: 8px;
-  color: #e6eef8;
   cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.dot.active {
+  background: var(--t-accent);
+  border-color: var(--t-accent);
+  transform: scale(1.12);
+  box-shadow: 0 8px 20px rgba(127,176,105,0.12);
 }
 
-/* Mobile: stack controls */
+/* nav buttons */
+#testimonials .nav { 
+  display: flex; 
+  gap: 8px; 
+  align-items: center; 
+  justify-content: flex-end; 
+}
+#testimonials .btn {
+  background: #eaf3ea;
+  border: 1px solid rgba(45,80,22,0.12);
+  color: var(--t-dark);
+  padding: 8px 12px;
+  border-radius: 50%;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 44px;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+#testimonials .btn:hover { 
+  transform: translateY(-2px); 
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06); 
+}
+
+/* responsive */
 @media (max-width: 720px) {
-  #testimonials .container { max-width: 100%; padding: 0 1rem; }
-  .testimonial-slide { flex-direction: column; text-align: center; padding: 18px; }
-  .testimonial-controls { grid-template-columns: 1fr; gap: 10px; }
-  .testimonial-dots { justify-self: center; }
-  .testimonial-actions { justify-self: center; }
+  .slide { 
+    flex-direction: column; 
+    text-align: center; 
+    padding: 12px; 
+    gap: 10px; 
+  }
+  .avatar { 
+    width: 64px; 
+    height: 64px; 
+  }
+  .carousel { 
+    padding: 12px; 
+    border-radius: 14px; 
+  }
+  .controls { 
+    flex-direction: column; 
+    gap: 10px; 
+    align-items: center; 
+  }
+  #testimonials .nav { 
+    justify-content: center; 
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .slide, .dot, #testimonials .btn { 
+    transition: none !important; 
+    animation: none !important; 
+  }
+}
+
+/* ensure no other stylesheet forces max-height */
+.carousel, .slides, .slide { 
+  max-height: none !important; 
+  height: auto !important; 
 }
 
 
@@ -1144,7 +1229,7 @@ textarea.form-input {
   resize: vertical;
 }
 
-.btn-primary {
+.contact .btn-primary {
   background: #fff;
   color: var(--dark);
   padding: 12px 28px;
@@ -1156,7 +1241,7 @@ textarea.form-input {
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.btn-primary:hover {
+.contact .btn-primary:hover {
   background: var(--dark);
   color: #fff;
   transform: translateY(-2px);
@@ -1227,7 +1312,7 @@ textarea.form-input {
   gap: 15px;
 }
 
-.input-group {
+.feedback-form .input-group {
   position: relative;
 }
 
@@ -1395,7 +1480,8 @@ footer {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 44px; height: 44px;
+  width: 44px; 
+  height: 44px;
   background: rgba(255,255,255,0.08);
   display: flex;
   align-items: center;
