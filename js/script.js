@@ -390,44 +390,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.handleContact = async (e) => {
       e.preventDefault();
+
       let valid = true;
       for (const key of Object.keys(fields)) {
         const value = fields[key] ? fields[key].value : '';
         if (!validateField(key, value)) valid = false;
       }
+
       if (!valid) {
-        if (statusDiv) {
-          statusDiv.textContent = 'Please fix the errors in the form.';
-          statusDiv.className = 'form-status error';
-          setTimeout(() => { if (statusDiv) statusDiv.textContent = ''; }, 4500);
-        }
+        statusDiv.textContent = 'Please fix the errors in the form.';
+        statusDiv.className = 'form-status error';
         return;
       }
+
       const submitBtn = contactForm.querySelector('button[type="submit"]');
-      const spinner = submitBtn ? submitBtn.querySelector('.loading') : null;
-      if (spinner) spinner.classList.add('active');
-      if (submitBtn) submitBtn.disabled = true;
+      const spinner = submitBtn.querySelector('.loading');
+      spinner.classList.add('active');
+      submitBtn.disabled = true;
 
-      // simulate network
-      await new Promise(res => setTimeout(res, 1400));
-      const success = Math.random() > 0.12;
+      try {
+      const res = await fetch("https://tallow-and-care-official.onrender.com/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fields.name.value,
+          email: fields.email.value,
+          phone: fields.phone.value,
+          interest: fields.interest.value,
+          message: fields.message.value
+        })
+      });
 
-      if (spinner) spinner.classList.remove('active');
-      if (submitBtn) submitBtn.disabled = false;
+      const data = await res.json();
 
-      if (statusDiv) {
-        if (success) {
-          statusDiv.textContent = 'Message sent successfully! We will get back to you soon.';
-          statusDiv.className = 'form-status success';
-          contactForm.reset();
-        } else {
-          statusDiv.textContent = 'Oops! Something went wrong. Please try again later.';
-          statusDiv.className = 'form-status error';
+      if (!res.ok) throw new Error(data.error || "Failed");
+
+      statusDiv.textContent = "Message sent successfully!";
+      statusDiv.className = "form-status success";
+      contactForm.reset();
+
+    } catch (err) {
+        statusDiv.textContent = "Failed to send message. Try again.";
+        statusDiv.className = "form-status error";
+      } finally {
+          spinner.classList.remove('active');
+          submitBtn.disabled = false;
+          setTimeout(() => {
+            statusDiv.textContent = "";
+            statusDiv.className = "form-status";
+          }, 5000);
         }
-        setTimeout(() => { if (statusDiv) { statusDiv.textContent = ''; statusDiv.className = 'form-status'; } }, 6000);
-      }
     };
-  }
 
   /* -------------------------
      Feedback form (guarded)
