@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tallow & Care</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-zN6U+X2G8qg6MTPpjcL5Zl2ZmA3ccfLxU5El4zJoKbjrKMgHhEOfVnQ9a33yCJ5i0eULhUO5Vd3QpC6YpFcJ3A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
 </head>
 <body>
     <!-- Navbar -->
@@ -29,7 +29,7 @@
     
     <!-- Hero Section -->
     <section id="home" class="hero hero-video">
-      <video autoplay muted loop playsinline preload="auto" class="hero-bg-video"poster="video-poster.jpg">
+      <video autoplay muted loop playsinline preload="auto" class="hero-bg-video">
         <source src="assets/videos/your-video.mp4" type="video/mp4">
       </video>
       <div class="hero-content">
@@ -300,6 +300,47 @@
         </div>
     </section>
 
+    <!-- Testimonials -->
+    <section id="testimonials" class="testimonials-section" aria-labelledby="testimonials-title">
+        <div class="container">
+            <h2 class="testimonials-title">What People Say About Tallow & Care</h2>
+            <p class="testimonials-subtitle">Real words from people who believe in natural care and honest products</p>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="assets/images/user1.jpg" alt="Customer" class="testimonial-avatar">
+                            <div>
+                                <div class="testimonial-name">Sarah Johnson</div>
+                                <div class="testimonial-role">Pet Parent</div>
+                            </div>
+                    </div>
+                    <p class="testimonial-text">My dog’s skin allergies reduced in two weeks. The soap feels pure and honest no chemicals, no smell, just results.</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="assets/images/user2.jpg" alt="Customer" class="testimonial-avatar">
+                            <div>
+                                <div class="testimonial-name">David Clarke</div>
+                                <div class="testimonial-role">Farm Owner</div>
+                            </div>
+                    </div>
+                    <p class="testimonial-text">Finally a product that respects animals and nature. The shampoo works and the philosophy is even better.</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <img src="assets/images/user3.jpg" alt="Customer" class="testimonial-avatar">
+                            <div>
+                                <div class="testimonial-name">Emily Carter</div>
+                                <div class="testimonial-role">Veterinary Assistant</div>
+                            </div>
+                    </div>
+                    <p class="testimonial-text">I recommend Tallow & Care to pet owners who want safe, traditional care without synthetic additives.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     <!-- contact form -->
     <section id="contact" class="section contact reveal">
       <div class="container">
@@ -350,65 +391,30 @@
       </div>
     </section>
     
-    <!-- Testimonials -->
-    <section id="testimonials" aria-label="Customer testimonials">
-      <div class="tc-container">
-        <div class="carousel" data-autoplay="true" data-interval="5000">
-          <div class="slides">
-            <figure class="slide is-active" aria-hidden="false">
-              <img class="avatar" src="/mnt/data/1a40d1e9-6d2e-4519-9a4a-857d02e7ce22.png" alt="Nishtha — Pet owner">
-              <blockquote class="quote">
-                <p>Superb product — my dog’s coat felt softer in one wash. Smells mild, gentle and vet-safe.</p>
-                <figcaption class="author">— Nishtha, Pet owner</figcaption>
-              </blockquote>
-            </figure>
-            <figure class="slide" aria-hidden="true">
-              <img class="avatar" src="/mnt/data/1a40d1e9-6d2e-4519-9a4a-857d02e7ce22.png" alt=" Amaan — Pet owner">
-              <blockquote class="quote">
-                <p> feedback 2</p>
-                <figcaption class="author">— Amaan, Pet owner</figcaption>
-              </blockquote>
-            </figure>
-            <figure class="slide" aria-hidden="true">
-              <img class="avatar" src="/mnt/data/1a40d1e9-6d2e-4519-9a4a-857d02e7ce22.png" alt="Riya — Pet owner">
-              <blockquote class="quote">
-                <p>Feedback 3</p>
-                <figcaption class="author">— Riya, Pet owner</figcaption>
-              </blockquote>
-            </figure>
-          </div>
-          <div class="controls" role="tablist" aria-label="Testimonial controls">
-            <div class="dots" id="testimonialDots"></div>
-            <div class="nav">
-              <button class="btn prev" aria-label="Previous testimonial">‹</button>
-              <button class="btn next" aria-label="Next testimonial">›</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    
 
     <!--  Feedback  -->
+    <section id="feedback"> 
     <div class="feedback-card">
         <h3 class="feedback-title">💬 Share Your Feedback</h3>
         <form action="https://formspree.io/f/YOUR_ID" method="POST" id="feedbackForm" class="feedback-form">
           <div class="input-group">
-            <input type="text" id="name" name="name" placeholder="Your Name" required>
+            <input type="text" id="feedback-name" name="name" placeholder="Your Name" required>
           </div>
           <div class="input-group">
-            <input type="email" id="email" name="email" placeholder="Your Email" required>
+            <input type="email" id="feedback-email" name="email" placeholder="Your Email" required>
           </div>
           <div class="input-group">
-            <textarea id="feedback" name="feedback" rows="4" placeholder="Write your feedback here..." required></textarea>
+            <textarea id="feedback-message" name="feedback" rows="4" placeholder="Write your feedback here..." required></textarea>
           </div>
           <button type="submit" class="btn-submit">Send Feedback</button>
         </form>
         <div id="feedbackMessage" class="feedback-message hidden">
-          <p>✨ Thanks for your feedback! We’ll get back soon.</p>
+          <p>✨ Thanks for your feedback! We'll get back soon.</p>
         </div>
       </div>
     </section>
-    
+
     <!-- Footer Section -->
     <footer>
       <div class="footer-content">
@@ -429,16 +435,17 @@
           <p><a href="tel:+919457294984">📱 +91 9457294984</a></p>
           <p>🏢 Sustainable Care Facility</p>
           <p>🌍 Serving Pets Nationwide</p>
-        <div class="social-icons">
-          <a href="https://www.instagram.com/tallowandcare" target="_blank" aria-label="Instagram">
-            <img src="assets/images/instagram_logo.png" alt="Instagram" class="social-img">
-          </a>
-          <a href="https://wa.me/919457294984" target="_blank" aria-label="WhatsApp">
-            <img src="assets/images/whatsapp_logo.png" alt="WhatsApp" class="social-img">
-          </a>
-          <a href="https://www.linkedin.com/company/tallow-care/" target="_blank" aria-label="LinkedIn">
-            <img src="assets/images/linkedin_logo.png" alt="LinkedIn" class="social-img">
-          </a>
+          <div class="social-icons">
+            <a href="https://www.instagram.com/tallowandcare" target="_blank" aria-label="Instagram">
+                <img src="assets/images/instagram_logo.png" alt="Instagram" class="social-img">
+            </a>
+            <a href="https://wa.me/919457294984" target="_blank" aria-label="WhatsApp">
+                <img src="assets/images/whatsapp_logo.png" alt="WhatsApp" class="social-img">
+            </a>
+            <a href="https://www.linkedin.com/company/tallow-care/" target="_blank" aria-label="LinkedIn">
+                <img src="assets/images/linkedin_logo.png" alt="LinkedIn" class="social-img">
+            </a>
+          </div>
         </div>
       </div>
       <div class="footer-bottom" data-animate>
@@ -451,8 +458,3 @@
  <script src="js/script.js"></script>
 </body>
 </html>
-
-        
-
-
-

@@ -1,5 +1,14 @@
+const API = null; // backend not ready yet
+
+const products = []; // placeholder data
+console.log("Products coming soon", products);
+
 // script.js — cleaned & optimized for Tallow & Care
 document.addEventListener('DOMContentLoaded', () => {
+  if (!('IntersectionObserver' in window)) {
+  console.warn('IntersectionObserver not supported');
+  return;
+  }
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => Array.from(document.querySelectorAll(s));
 
@@ -145,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const observer = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
+          entry.target.classList.add('active');
           obs.unobserve(entry.target); // animate only once
         }
       });
@@ -213,11 +222,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (toggle && navLinks) {
     toggle.addEventListener("click", () => {
-      const isOpen = !navLinks.classList.contains('active');
-      toggle.classList.toggle("open");
-      navLinks.classList.toggle("active");
-      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
-    });
+    navLinks.classList.toggle("active");
+    toggle.classList.toggle("open");
+    const expanded = navLinks.classList.contains('active');
+    toggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+  });
 
     // close menu when clicking any link (guarded)
     document.querySelectorAll(".nav-link").forEach(link => {
@@ -381,14 +390,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function goTo(index, userTriggered){
     if(index === active) return;
-    slides[active].classList.remove('is-active');
-    slides[active].setAttribute('aria-hidden','true');
+    if (slides[active]) {
+      slides[active].classList.remove('is-active');
+      slides[active].setAttribute('aria-hidden','true');
+    }
+
     dots[active].classList.remove('active');
 
     active = (index + slides.length) % slides.length;
 
-    slides[active].classList.add('is-active');
-    slides[active].setAttribute('aria-hidden','false');
+    if (slides[active]) {
+      slides[active].classList.add('is-active');
+      slides[active].setAttribute('aria-hidden','false');
+    }
+
     dots[active].classList.add('active');
 
     syncViewportHeight(active);
