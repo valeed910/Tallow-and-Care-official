@@ -402,46 +402,44 @@ document.addEventListener('DOMContentLoaded', () => {
         statusDiv.className = 'form-status error';
         return;
       }
-
+    
       const submitBtn = contactForm.querySelector('button[type="submit"]');
       const spinner = submitBtn.querySelector('.loading');
       spinner.classList.add('active');
       submitBtn.disabled = true;
 
       try {
-      const res = await fetch("https://tallow-and-care-official.onrender.com/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: fields.name.value,
-          email: fields.email.value,
-          phone: fields.phone.value,
-          interest: fields.interest.value,
-          message: fields.message.value
-        })
-      });
+  const res = await fetch("https://tallow-and-care-official.onrender.com/api/contact", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: fields.name.value,
+      email: fields.email.value,
+      phone: fields.phone.value,
+      interest: fields.interest.value,
+      message: fields.message.value
+    })
+  });
 
-      const data = await res.json();
+  const data = await res.json();
 
-      if (!res.ok) throw new Error(data.error || "Failed");
+  if (!res.ok) throw new Error(data.error || "Failed");
 
-      statusDiv.textContent = "Message sent successfully!";
-      statusDiv.className = "form-status success";
-      contactForm.reset();
+  statusDiv.textContent = "Message sent successfully!";
+  statusDiv.className = "form-status success";
+  contactForm.reset();
 
-    } catch (err) {
-        statusDiv.textContent = "Failed to send message. Try again.";
-        statusDiv.className = "form-status error";
-      } finally {
-          spinner.classList.remove('active');
-          submitBtn.disabled = false;
-          setTimeout(() => {
-            statusDiv.textContent = "";
-            statusDiv.className = "form-status";
-          }, 5000);
-        }
-    };
-
+} catch (err) {
+  statusDiv.textContent = "Failed to send message. Try again.";
+  statusDiv.className = "form-status error";
+} finally {
+  spinner.classList.remove('active');
+  submitBtn.disabled = false;
+    setTimeout(() => {
+    statusDiv.textContent = "";
+    statusDiv.className = "form-status";
+  }, 5000);
+}}}
   /* -------------------------
      Feedback form (guarded)
      ------------------------- */
@@ -515,5 +513,3 @@ document.addEventListener('DOMContentLoaded', () => {
   if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
 }); // DOMContentLoaded
-
-// NOTE: no extra scroll handlers outside DOMContentLoaded — everything initialized above
