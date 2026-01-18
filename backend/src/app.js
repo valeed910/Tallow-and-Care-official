@@ -1,18 +1,24 @@
-import express from "express"
-import cors from "cors"
+import express from "express";
+import cors from "cors";
+import contactRoute from "./routes/contact.js";
 
-const app = express()
-app.use(cors())
-app.use(express.json())
+const app = express();
 
-// TEMP test data
+// middleware
+app.use(cors());
+app.use(express.json());
+
+// routes
+app.use("/api/contact", contactRoute);
+
+// TEMP test data (ok for now)
 const products = [
   { id: 1, name: "Tallow Dog Soap", price: 199 },
   { id: 2, name: "Tallow Animal Shampoo", price: 249 }
-]
+];
 
 app.get("/api/products", (req, res) => {
-  res.json(products)
-})
+  res.json(products);
+});
 
-export default app
+export default app;
