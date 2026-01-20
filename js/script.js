@@ -409,17 +409,21 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.disabled = true;
 
       try {
-  const res = await fetch("https://tallow-and-care-official.onrender.com/api/contact", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name: fields.name.value,
-      email: fields.email.value,
-      phone: fields.phone.value,
-      interest: fields.interest.value,
-      message: fields.message.value
-    })
-  });
+        const token = turnstile.getResponse();
+        const res = await fetch("https://tallow-and-care-official.onrender.com/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            token,
+          name: fields.name.value,
+          email: fields.email.value,
+          phone: fields.phone.value,
+          interest: fields.interest.value,
+          message: fields.message.value
+        }
+      )
+    }
+  );
 
   const data = await res.json();
 
