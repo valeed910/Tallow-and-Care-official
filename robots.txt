@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tallow-and-care-official.vercel.app/sitemap.xml
+Sitemap: https://tallowandcare.in/sitemap.xml
+
 

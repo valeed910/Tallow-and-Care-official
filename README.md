@@ -5,7 +5,8 @@ A modern, responsive landing page for **Tallow & Care**, a sustainable startup c
 ---
 
 ## 🚀 Live Demo
-https://tallow-and-care-official.vercel.app/
+https://tallowandcare.in
+
 
 ---
 
