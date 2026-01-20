@@ -17,8 +17,9 @@ const products = [
   { id: 2, name: "Tallow Animal Shampoo", price: 249 }
 ];
 
-app.get("/api/products", (req, res) => {
-  res.json(products);
+app.get("/", (req, res) => {
+  res.send("API is running");
 });
+
 
 export default app;
