@@ -13,7 +13,8 @@ async function verifyCaptcha(token, ip) {
       secret: process.env.TURNSTILE_SECRET,
       response: token,
       remoteip: ip
-    })
+    }),
+    { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
   );
 
   return res.data.success;
@@ -22,6 +23,10 @@ async function verifyCaptcha(token, ip) {
 router.post("/", async (req, res) => {
   try {
     const { token, name, email, phone, interest, message } = req.body;
+
+    console.log("TOKEN:", token);
+    console.log("SECRET:", process.env.TURNSTILE_SECRET ? "OK" : "MISSING");
+
 
     // 1. captcha check (FIRST)
     if (!token) {

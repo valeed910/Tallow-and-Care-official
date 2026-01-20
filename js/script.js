@@ -409,7 +409,8 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.disabled = true;
 
       try {
-        const token = document.querySelector('input[name="cf-turnstile-response"]')?.value;
+        const token = document.querySelector('input[name="cf-turnstile-response"]').value;
+
         const res = await fetch("https://tallow-and-care-official.onrender.com/api/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
