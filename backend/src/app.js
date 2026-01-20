@@ -1,12 +1,22 @@
 import express from "express";
 import cors from "cors";
 import contactRoute from "./routes/contact.js";
-
+import rateLimit from "express-rate-limit";
 const app = express();
+
+app.set("trust proxy", 1);
 
 // middleware
 app.use(cors());
 app.use(express.json());
+
+const contactLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20
+});
+
+app.use("/api/contact", contactLimiter);
+
 
 // routes
 app.use("/api/contact", contactRoute);
