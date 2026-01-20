@@ -1,18 +1,44 @@
 import express from "express";
 import { Resend } from "resend";
+import axios from "axios";
 
 const router = express.Router();
-
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+// captcha verify helper
+async function verifyCaptcha(token, ip) {
+  const res = await axios.post(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    new URLSearchParams({
+      secret: process.env.TURNSTILE_SECRET,
+      response: token,
+      remoteip: ip
+    })
+  );
+
+  return res.data.success;
+}
 
 router.post("/", async (req, res) => {
   try {
-    const { name, email, phone, interest, message } = req.body;
+    const { token, name, email, phone, interest, message } = req.body;
 
+    // 1. captcha check (FIRST)
+    if (!token) {
+      return res.status(400).json({ error: "Captcha missing" });
+    }
+
+    const ok = await verifyCaptcha(token, req.ip);
+    if (!ok) {
+      return res.status(403).json({ error: "Captcha failed" });
+    }
+
+    // 2. validation
     if (!name || !email || !message) {
       return res.status(400).json({ error: "Missing fields" });
     }
 
+    // 3. send email
     await resend.emails.send({
       from: "Tallow & Care <contact@tallowandcare.in>",
       to: ["tallowandcare@gmail.com"],
