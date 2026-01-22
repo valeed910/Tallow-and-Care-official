@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
 
     // 3. send email
     await resend.emails.send({
-      from: "Tallow & Care <contact@tallowandcare.in>",
+      from: "Tallow & Care <contact@resend.dev>",
       to: ["tallowandcare@gmail.com"],
       subject: `New Contact: ${interest || "General"}`,
       html: `
