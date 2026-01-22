@@ -340,115 +340,143 @@ document.addEventListener('DOMContentLoaded', () => {
      Contact form validation & submit (handleContact referenced in HTML)
      ------------------------- */
   const contactForm = document.querySelector('.contact-form');
-  if (contactForm) {
-    const fields = {
-      name: $('#name'),
-      email: $('#email'),
-      phone: $('#phone'),
-      interest: $('#interest'),
-      message: $('#message')
-    };
-    const errs = {
-      name: $('#name-error'),
-      email: $('#email-error'),
-      phone: $('#phone-error'),
-      interest: $('#interest-error'),
-      message: $('#message-error')
-    };
-    const statusDiv = $('#form-status');
+if (contactForm) {
 
-    function showError(name, msg) {
-      if (errs[name]) errs[name].textContent = msg;
-      if (fields[name]) fields[name].classList.add('error');
-    }
-    function clearError(name) {
-      if (errs[name]) errs[name].textContent = '';
-      if (fields[name]) fields[name].classList.remove('error');
-    }
-    function validateField(name, value) {
-      clearError(name);
-      if (name === 'name') {
-        if (!value.trim()) { showError(name, 'Name is required.'); return false; }
-      } else if (name === 'email') {
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) { showError(name, 'A valid email is required.'); return false; }
-      } else if (name === 'phone') {
-        if (value && !/^\+?[\d\s-]{8,}$/.test(value)) { showError(name, 'If provided, phone must be valid.'); return false; }
-      } else if (name === 'interest') {
-        if (!value) { showError(name, 'Please select an interest.'); return false; }
-      } else if (name === 'message') {
-        if (!value.trim()) { showError(name, 'A message is required.'); return false; }
-        if (value.trim().length < 10) { showError(name, 'Message must be at least 10 characters.'); return false; }
-      }
-      return true;
+  const $ = (s) => document.querySelector(s);
+
+  const fields = {
+    name: $('#name'),
+    email: $('#email'),
+    phone: $('#phone'),
+    interest: $('#interest'),
+    message: $('#message')
+  };
+
+  const errs = {
+    name: $('#name-error'),
+    email: $('#email-error'),
+    phone: $('#phone-error'),
+    interest: $('#interest-error'),
+    message: $('#message-error')
+  };
+
+  const statusDiv = $('#form-status');
+
+  function showError(name, msg) {
+    if (errs[name]) errs[name].textContent = msg;
+    if (fields[name]) fields[name].classList.add('error');
+  }
+
+  function clearError(name) {
+    if (errs[name]) errs[name].textContent = '';
+    if (fields[name]) fields[name].classList.remove('error');
+  }
+
+  function validateField(name, value) {
+    clearError(name);
+
+    if (name === 'name' && !value.trim()) {
+      showError(name, 'Name is required.');
+      return false;
     }
 
-    Object.keys(fields).forEach(key => {
-      if (!fields[key]) return;
-      fields[key].addEventListener('input', (e) => validateField(key, e.target.value));
-      fields[key].addEventListener('blur', (e) => validateField(key, e.target.value));
-    });
+    if (name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      showError(name, 'A valid email is required.');
+      return false;
+    }
 
-    window.handleContact = async (e) => {
-      e.preventDefault();
-      turnstile.execute();
+    if (name === 'interest' && !value) {
+      showError(name, 'Please select an interest.');
+      return false;
+    }
 
-      let valid = true;
-      for (const key of Object.keys(fields)) {
-        const value = fields[key] ? fields[key].value : '';
-        if (!validateField(key, value)) valid = false;
+    if (name === 'message') {
+      if (!value.trim()) {
+        showError(name, 'A message is required.');
+        return false;
       }
-
-      if (!valid) {
-        statusDiv.textContent = 'Please fix the errors in the form.';
-        statusDiv.className = 'form-status error';
-        return;
+      if (value.trim().length < 10) {
+        showError(name, 'Message must be at least 10 characters.');
+        return false;
       }
-    
-      const submitBtn = contactForm.querySelector('button[type="submit"]');
-      const spinner = submitBtn.querySelector('.loading');
-      spinner.classList.add('active');
-      submitBtn.disabled = true;
+    }
 
-      try {
-        const token = turnstile.getResponse();
-        if (!token) {
-        alert("Captcha not ready");
-        return;
-      }
-        const res = await fetch("https://tallow-and-care-official.onrender.com/api/contact", {
+    return true;
+  }
+
+  function validateForm() {
+    let valid = true;
+    for (const key of Object.keys(fields)) {
+      if (!validateField(key, fields[key].value)) valid = false;
+    }
+    return valid;
+  }
+
+  // ================================
+  // 1️⃣ FORM SUBMIT → ONLY RUN CAPTCHA
+  // ================================
+  window.handleContact = function (e) {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      statusDiv.textContent = 'Please fix the errors in the form.';
+      statusDiv.className = 'form-status error';
+      return;
+    }
+
+    statusDiv.textContent = 'Verifying...';
+    statusDiv.className = 'form-status';
+
+    // IMPORTANT: invisible captcha execution
+    turnstile.execute();
+  };
+
+  // =========================================
+  // 2️⃣ CAPTCHA CALLBACK → SEND TO BACKEND
+  // =========================================
+  window.onTurnstileSuccess = async function (token) {
+
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const spinner = submitBtn.querySelector('.loading');
+    spinner.classList.add('active');
+    submitBtn.disabled = true;
+
+    try {
+      const res = await fetch(
+        "https://tallow-and-care-official.onrender.com/api/contact",
+        {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             token,
-          name: fields.name.value,
-          email: fields.email.value,
-          phone: fields.phone.value,
-          interest: fields.interest.value,
-          message: fields.message.value
+            name: fields.name.value,
+            email: fields.email.value,
+            phone: fields.phone.value,
+            interest: fields.interest.value,
+            message: fields.message.value
+          })
         }
-      )
+      );
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed");
+
+      statusDiv.textContent = "Message sent successfully!";
+      statusDiv.className = "form-status success";
+      contactForm.reset();
+
+    } catch (err) {
+      console.error(err);
+      statusDiv.textContent = "Failed to send message. Try again.";
+      statusDiv.className = "form-status error";
+    } finally {
+      spinner.classList.remove('active');
+      submitBtn.disabled = false;
+      turnstile.reset();
     }
-  );
+  };
+}
 
-  const data = await res.json();
-
-  if (!res.ok) throw new Error(data.error || "Failed");
-
-  statusDiv.textContent = "Message sent successfully!";
-  statusDiv.className = "form-status success";
-  contactForm.reset();
-
-} catch (err) {
-  statusDiv.textContent = "Failed to send message. Try again.";
-  statusDiv.className = "form-status error";
-} finally {
-  spinner.classList.remove('active');
-  submitBtn.disabled = false;
-    setTimeout(() => {
-    statusDiv.textContent = "";
-    statusDiv.className = "form-status";
-  }, 5000);
-}}}
   /* -------------------------
      Feedback form (guarded)
      ------------------------- */
