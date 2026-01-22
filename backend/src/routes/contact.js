@@ -30,14 +30,14 @@ router.post("/", async (req, res) => {
 
 
     // // 1. captcha check (FIRST)
-    // if (!token) {
-    //   return res.status(400).json({ error: "Captcha missing" });
-    // }
+    if (!token) {
+      return res.status(400).json({ error: "Captcha missing" });
+    }
 
-    // const ok = await verifyCaptcha(token, req.ip);
-    // if (!ok) {
-    //   return res.status(403).json({ error: "Captcha failed" });
-    // }
+    const ok = await verifyCaptcha(token, req.ip);
+    if (!ok) {
+      return res.status(403).json({ error: "Captcha failed" });
+    }
 
     // 2. validation
     if (!name || !email || !message) {
