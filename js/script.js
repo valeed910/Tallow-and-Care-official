@@ -390,6 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.handleContact = async (e) => {
       e.preventDefault();
+      turnstile.execute();
 
       let valid = true;
       for (const key of Object.keys(fields)) {
