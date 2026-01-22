@@ -410,6 +410,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       try {
         const token = turnstile.getResponse();
+        if (!token) {
+        alert("Captcha not ready");
+        return;
+      }
         const res = await fetch("https://tallow-and-care-official.onrender.com/api/contact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
