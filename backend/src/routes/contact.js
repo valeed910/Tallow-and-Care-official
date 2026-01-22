@@ -26,17 +26,18 @@ router.post("/", async (req, res) => {
 
     console.log("TOKEN:", token);
     console.log("SECRET:", process.env.TURNSTILE_SECRET ? "OK" : "MISSING");
+    console.log("ENV SECRET:", process.env.TURNSTILE_SECRET);
 
 
-    // 1. captcha check (FIRST)
-    if (!token) {
-      return res.status(400).json({ error: "Captcha missing" });
-    }
+    // // 1. captcha check (FIRST)
+    // if (!token) {
+    //   return res.status(400).json({ error: "Captcha missing" });
+    // }
 
-    const ok = await verifyCaptcha(token, req.ip);
-    if (!ok) {
-      return res.status(403).json({ error: "Captcha failed" });
-    }
+    // const ok = await verifyCaptcha(token, req.ip);
+    // if (!ok) {
+    //   return res.status(403).json({ error: "Captcha failed" });
+    // }
 
     // 2. validation
     if (!name || !email || !message) {
