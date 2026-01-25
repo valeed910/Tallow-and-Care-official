@@ -413,7 +413,7 @@ if (contactForm) {
   }
 window.handleContact = async function (e) {
   e.preventDefault();
-   const token = await grecaptcha.execute("6Ld3tVUsAAAAABq5BKc-U7t_dlidZfugdxbKRApN", {
+   const token = await grecaptcha.execute("6LduyVUsAAAAAGwIjOXFjY4aQx89s57LUbaY1Yd1", {
     action: "contact"
   });
 
