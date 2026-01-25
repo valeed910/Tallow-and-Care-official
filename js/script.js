@@ -413,6 +413,9 @@ if (contactForm) {
   }
 window.handleContact = async function (e) {
   e.preventDefault();
+   const token = await grecaptcha.execute("6Ld3tVUsAAAAABq5BKc-U7t_dlidZfugdxbKRApN", {
+    action: "contact"
+  });
 
   statusDiv.textContent = "";
   statusDiv.className = "form-status";
@@ -428,8 +431,10 @@ window.handleContact = async function (e) {
         email: fields.email.value,
         phone: fields.phone.value,
         interest: fields.interest.value,
-        message: fields.message.value
+        message: fields.message.value,
+        recaptchaToken: token
       })
+
     });
 
     const text = await res.text(); // read ONCE
