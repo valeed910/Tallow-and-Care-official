@@ -411,71 +411,51 @@ if (contactForm) {
     }
     return valid;
   }
+window.handleContact = async function (e) {
+  e.preventDefault();
 
-  // ================================
-  // 1️⃣ FORM SUBMIT → ONLY RUN CAPTCHA
-  // ================================
-  window.handleContact = function (e) {
-    e.preventDefault();
+  statusDiv.textContent = "";
+  statusDiv.className = "form-status";
 
-    if (!validateForm()) {
-      statusDiv.textContent = 'Please fix the errors in the form.';
-      statusDiv.className = 'form-status error';
-      return;
-    }
+  if (!validateForm()) return;
 
-    statusDiv.textContent = 'Verifying...';
-    statusDiv.className = 'form-status';
+  try {
+    const res = await fetch("https://tallow-and-care-official.onrender.com/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: fields.name.value,
+        email: fields.email.value,
+        phone: fields.phone.value,
+        interest: fields.interest.value,
+        message: fields.message.value
+      })
+    });
 
-    // IMPORTANT: invisible captcha execution
-    turnstile.execute();
-  };
-
-  // =========================================
-  // 2️⃣ CAPTCHA CALLBACK → SEND TO BACKEND
-  // =========================================
-  window.onTurnstileSuccess = async function (token) {
-
-    const submitBtn = contactForm.querySelector('button[type="submit"]');
-    const spinner = submitBtn.querySelector('.loading');
-    spinner.classList.add('active');
-    submitBtn.disabled = true;
+    const text = await res.text(); // read ONCE
+    let data;
 
     try {
-      const res = await fetch(
-        "https://tallow-and-care-official.onrender.com/api/contact",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            token,
-            name: fields.name.value,
-            email: fields.email.value,
-            phone: fields.phone.value,
-            interest: fields.interest.value,
-            message: fields.message.value
-          })
-        }
-      );
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
-
-      statusDiv.textContent = "Message sent successfully!";
-      statusDiv.className = "form-status success";
-      contactForm.reset();
-
-    } catch (err) {
-      console.error(err);
-      statusDiv.textContent = "Failed to send message. Try again.";
-      statusDiv.className = "form-status error";
-    } finally {
-      spinner.classList.remove('active');
-      submitBtn.disabled = false;
-      turnstile.reset();
+      data = JSON.parse(text);
+    } catch {
+      data = { error: text };
     }
-  };
-}
+
+    if (!res.ok) {
+      throw new Error(data.error || "Request failed");
+    }
+
+    statusDiv.textContent = "Message sent successfully!";
+    statusDiv.className = "form-status success";
+    contactForm.reset();
+
+  } catch (err) {
+    statusDiv.textContent = err.message || "Something went wrong";
+    statusDiv.className = "form-status error";
+  }
+};
+
+
 
   /* -------------------------
      Feedback form (guarded)
@@ -549,4 +529,5 @@ if (contactForm) {
   const yearSpan = $('#year');
   if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
+}
 }); // DOMContentLoaded

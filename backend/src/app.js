@@ -2,31 +2,28 @@ import express from "express";
 import cors from "cors";
 import contactRoute from "./routes/contact.js";
 import rateLimit from "express-rate-limit";
-import axios from "axios";
 const app = express();
 
 app.set("trust proxy", 1);
 
 // middleware
-app.use(cors());
+app.use(cors({
+  origin: "*"
+}));
+
 app.use(express.json());
 
 const contactLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 20
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: (req, res) => {
+    res.status(429).json({ error: "Too many requests, slow down" });
+  }
 });
 
-async function verifyCaptcha(token, ip) {
-  const res = await axios.post(
-    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-    new URLSearchParams({
-      secret: process.env.TURNSTILE_SECRET,
-      response: token,
-      remoteip: ip
-    })
-  );
-  return res.data.success;
-}
+
 app.use("/api/contact", contactLimiter);
 
 // routes
