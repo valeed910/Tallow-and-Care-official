@@ -13,16 +13,18 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Captcha missing" });
     }
 
-    const assessmentRes = await fetch(
+const assessmentRes = await fetch(
   `https://recaptchaenterprise.googleapis.com/v1/projects/${process.env.GCP_PROJECT_ID}/assessments?key=${process.env.RECAPTCHA_ENTERPRISE_API_KEY}`,
   {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      event: {
-        token: recaptchaToken,
-        siteKey: process.env.RECAPTCHA_SITE_KEY,
-        expectedAction: "contact"
+      assessment: {
+        event: {
+          token: recaptchaToken,
+          siteKey: process.env.RECAPTCHA_SITE_KEY,
+          expectedAction: "contact"
+        }
       }
     })
   }
@@ -30,7 +32,7 @@ router.post("/", async (req, res) => {
 
 const assessment = await assessmentRes.json();
 
-console.log("reCAPTCHA score:", assessment.riskAnalysis?.score);
+console.log("score:", assessment.riskAnalysis?.score);
 
 if (!assessment.tokenProperties?.valid) {
   return res.status(403).json({ error: "Invalid captcha token" });
