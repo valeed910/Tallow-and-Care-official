@@ -413,9 +413,11 @@ if (contactForm) {
   }
 window.handleContact = async function (e) {
   e.preventDefault();
-   const token = await grecaptcha.execute("6Lc0zVUsAAAAAFVHrwfWUg04BCvNIb6wXCdf83Nz", {
-    action: "contact"
-  });
+   const token = await grecaptcha.enterprise.execute(
+  "6Lc0zVUsAAAAAFVhrwfWUg04BCvNIb6wXCdf83Nz",
+  { action: "contact" }
+);
+
 
   statusDiv.textContent = "";
   statusDiv.className = "form-status";
