@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
     }
 
 const assessmentRes = await fetch(
-  `https://recaptchaenterprise.googleapis.com/v1/projects/${process.env.GCP_PROJECT_ID}/assessments?key=${process.env.RECAPTCHA_ENTERPRISE_API_KEY}`,
+  `https://recaptchaenterprise.googleapis.com/v1/projects/${process.env.GCP_PROJECT_ID}/assessments?key=${process.env.AIzaSyDumZy7jiep4PPYjeuNJBDk-sSDESzCYEE}`,
   {
     method: "POST",
     headers: { "Content-Type": "application/json" },
