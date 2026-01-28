@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import contactRoute from "./routes/contact.js";
 import rateLimit from "express-rate-limit";
+import adminRoutes from "./routes/admin.js";
 const app = express();
 
 app.set("trust proxy", 1);
@@ -10,6 +11,10 @@ app.set("trust proxy", 1);
 app.use(cors({
   origin: "*"
 }));
+
+
+app.use("/api/admin", adminRoutes);
+
 
 app.use(express.json());
 
