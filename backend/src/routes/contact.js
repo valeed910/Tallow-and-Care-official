@@ -1,6 +1,8 @@
 import express from "express";
 import { Resend } from "resend";
 import rateLimit from "express-rate-limit";
+import Message from "../models/message.js";
+
 
 const router = express.Router();
 router.use(rateLimit({
@@ -20,6 +22,15 @@ router.post("/", async (req, res) => {
     if (!name || !email || !message) {
       return res.status(400).json({ error: "Missing fields" });
     }
+
+    await Message.create({
+      name,
+      email,
+      phone,
+      interest,
+      message
+    });
+
 
     // 3️⃣ SEND EMAIL
     await resend.emails.send({

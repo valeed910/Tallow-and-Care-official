@@ -12,6 +12,7 @@
     "dotenv": "^16.4.0",
     "express": "^4.19.2",
     "express-rate-limit": "^8.2.1",
+    "mongoose": "^9.1.5",
     "resend": "^6.7.0"
   },
   "devDependencies": {
