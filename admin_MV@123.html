@@ -8,9 +8,10 @@
 
 <h2>Admin Messages</h2>
 <table id="table"></table>
-
 <script>
+  console.log("Admin JS loaded");
 fetch("https://tallow-and-care-official.onrender.com/api/admin/messages", {
+  method: "GET",
   headers: {
     "x-admin-key": "supersecret123"
   }
@@ -24,16 +25,11 @@ fetch("https://tallow-and-care-official.onrender.com/api/admin/messages", {
         <td>${m.name}</td>
         <td>${m.email}</td>
         <td>${m.message}</td>
-        <td><button onclick="del('${m._id}')">Delete</button></td>
       </tr>
     `;
   });
+})
+.catch(err => {
+  console.error("FETCH FAILED:", err);
 });
-
-function del(id) {
-  fetch("https://tallow-and-care-official.onrender.com/api/admin/messages/" + id, {
-    method: "DELETE",
-    headers: { "x-admin-key": "supersecret123" }
-  }).then(() => location.reload());
-}
 </script>
