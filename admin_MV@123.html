@@ -1,10 +1,11 @@
 <script>
-  const pass = prompt("Enter admin password:");
-  if (pass !== "your-secret-password") {
-    document.body.innerHTML = "Access denied";
-    throw new Error("Denied");
-  }
+const pass = prompt("Enter admin password:");
+if (pass !== "your-secret-password") {
+  document.body.innerHTML = "Access denied";
+  throw new Error("Denied");
+}
 </script>
+
 
 <h2>Admin Messages</h2>
 <table id="table"></table>
