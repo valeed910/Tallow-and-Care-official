@@ -1,0 +1,40 @@
+<script>
+  const pass = prompt("Enter admin password:");
+  if (pass !== "your-secret-password") {
+    document.body.innerHTML = "Access denied";
+    throw new Error("Denied");
+  }
+</script>
+
+
+<h2>Admin Messages</h2>
+<table id="table"></table>
+
+<script>
+fetch("https://tallow-and-care.onrender.com/api/admin/messages", {
+  headers: {
+    "x-admin-key": "supersecret123"
+  }
+})
+.then(res => res.json())
+.then(data => {
+  const table = document.getElementById("table");
+  data.forEach(m => {
+    table.innerHTML += `
+      <tr>
+        <td>${m.name}</td>
+        <td>${m.email}</td>
+        <td>${m.message}</td>
+        <td><button onclick="del('${m._id}')">Delete</button></td>
+      </tr>
+    `;
+  });
+});
+
+function del(id) {
+  fetch("https://api.tallowandcare.in/api/admin/messages/" + id, {
+    method: "DELETE",
+    headers: { "x-admin-key": "supersecret123" }
+  }).then(() => location.reload());
+}
+</script>
