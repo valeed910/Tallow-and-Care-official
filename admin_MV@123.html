@@ -10,7 +10,7 @@
 <table id="table"></table>
 
 <script>
-fetch("https://tallow-and-care.onrender.com/api/admin/messages", {
+fetch("https://tallow-and-care-official.onrender.com/api/admin/messages", {
   headers: {
     "x-admin-key": "supersecret123"
   }
@@ -31,7 +31,7 @@ fetch("https://tallow-and-care.onrender.com/api/admin/messages", {
 });
 
 function del(id) {
-  fetch("https://tallowandcare.onrender.com/api/admin/messages/" + id, {
+  fetch("https://tallow-and-care-official.onrender.com/api/admin/messages/" + id, {
     method: "DELETE",
     headers: { "x-admin-key": "supersecret123" }
   }).then(() => location.reload());

@@ -12,11 +12,9 @@ app.use(cors({
   origin: "*"
 }));
 
+app.use(express.json());
 
 app.use("/api/admin", adminRoutes);
-
-
-app.use(express.json());
 
 const contactLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
