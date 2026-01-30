@@ -7,42 +7,97 @@
 
 </head>
   <style>
-    body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #eaeaea;
 }
+
 .admin-container {
-  max-width: 900px;
-  margin: 40px auto;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
+  max-width: 1000px;
+  margin: 60px auto;
+  background: rgba(20, 20, 30, 0.9);
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.5s ease;
 }
+
+h2 {
+  text-align: center;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  color: #00e5ff;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 12px;
 }
-td, th {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
+
 th {
-  background: #111;
-  color: white;
+  background: #00e5ff;
+  color: #000;
+  text-transform: uppercase;
+  font-size: 13px;
+  padding: 12px;
 }
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  font-size: 14px;
+}
+
+tr:hover {
+  background: rgba(0, 229, 255, 0.08);
+  transition: 0.2s;
+}
+
+button {
+  background: linear-gradient(135deg, #00e5ff, #00bcd4);
+  border: none;
+  color: #000;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #00e5ff;
+}
+
+.pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 
   </style>
 
 <body>
-  <div class="admin-container">
-  <h2>Admin Messages</h2>
-  <table id="table"></table>
-  </div>
-  <div style="margin-top:10px;">
-    <button onclick="prevPage()">Prev</button>
-    <button onclick="nextPage()">Next</button>
-  </div>
+ <div class="admin-container">
+  <h2> Admin Control Panel</h2>
 
+  <table id="table"></table>
+
+  <div class="pagination">
+    <button onclick="prevPage()">⬅ Prev</button>
+    <button onclick="nextPage()">Next ➡</button>
+  </div>
+</div>
 
 </body>
 
@@ -80,6 +135,8 @@ async function loadMessages() {
   const data = await res.json();
   const table = document.getElementById("table");
 
+  table.style.animation = "fadeIn 0.3s ease";
+  
   // HEADER
   table.innerHTML = `
     <tr>
