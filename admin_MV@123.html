@@ -38,10 +38,17 @@ th {
   <h2>Admin Messages</h2>
   <table id="table"></table>
   </div>
+  <div style="margin-top:10px;">
+    <button onclick="prevPage()">Prev</button>
+    <button onclick="nextPage()">Next</button>
+  </div>
+
 
 </body>
 
   <script>
+    let page = 1;
+
 async function login() {
   const password = prompt("Enter admin password");
 
@@ -61,11 +68,14 @@ async function login() {
 }
 
 async function loadMessages() {
-  const res = await fetch("https://tallow-and-care-official.onrender.com/api/admin/messages", {
-    headers: {
-      "x-admin-token": localStorage.getItem("adminToken")
+  const res = await fetch(
+    `https://tallow-and-care-official.onrender.com/api/admin/messages?page=${page}`,
+    {
+      headers: {
+        "x-admin-token": localStorage.getItem("adminToken")
+      }
     }
-  });
+  );
 
   const data = await res.json();
   const table = document.getElementById("table");
@@ -108,7 +118,19 @@ async function deleteMsg(id) {
   loadMessages(); // refresh
 }
 
+function nextPage() {
+  page++;
+  loadMessages();
+}
+
+function prevPage() {
+  if (page > 1) {
+    page--;
+    loadMessages();
+  }
+}
+
+
 login();
 </script>
-
 </html>
