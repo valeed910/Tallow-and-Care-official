@@ -13,8 +13,18 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.post("/api/admin/login", (req, res) => {
+  const { password } = req.body;
+
+  if (password !== process.env.ADMIN_PASSWORD) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  res.json({ token: "ok" });
+});
 
 app.use("/api/admin", adminRoutes);
+
 
 const contactLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,

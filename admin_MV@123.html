@@ -1,36 +1,35 @@
-<script>
-const pass = prompt("Enter admin password:");
-if (pass !== "your-secret-password") {
-  document.body.innerHTML = "Access denied";
-  throw new Error("Denied");
-}
-</script>
-
-
 <h2>Admin Messages</h2>
 <table id="table"></table>
 <script>
-  console.log("Admin JS loaded");
-fetch("https://tallow-and-care-official.onrender.com/api/admin/messages", {
-  method: "GET",
-  headers: {
-    "x-admin-key": "supersecret123"
-  }
-})
-.then(res => res.json())
-.then(data => {
-  const table = document.getElementById("table");
-  data.forEach(m => {
-    table.innerHTML += `
-      <tr>
-        <td>${m.name}</td>
-        <td>${m.email}</td>
-        <td>${m.message}</td>
-      </tr>
-    `;
+async function login() {
+  const password = prompt("Enter admin password");
+
+  const res = await fetch("/api/admin/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password })
   });
-})
-.catch(err => {
-  console.error("FETCH FAILED:", err);
-});
+
+if (!res.ok) {
+  alert("Wrong password");
+  return;
+}
+
+  localStorage.setItem("adminToken", "ok");
+  loadMessages();
+}
+
+async function loadMessages() {
+  const res = await fetch("/api/admin/messages", {
+    headers: {
+      "x-admin-token": localStorage.getItem("adminToken")
+    }
+  });
+
+  const data = await res.json();
+  console.log(data);
+}
+
+login();
 </script>
+
