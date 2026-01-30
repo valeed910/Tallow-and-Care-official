@@ -460,19 +460,51 @@ window.handleContact = async function (e) {
   /* -------------------------
      Feedback form (guarded)
      ------------------------- */
-  const feedbackFormEl = document.getElementById("feedbackForm");
-  if (feedbackFormEl) {
-    feedbackFormEl.addEventListener("submit", function(e) {
-      e.preventDefault();
-      const messageBox = document.getElementById("feedbackMessage");
-      if (!messageBox) return;
+const feedbackFormEl = document.getElementById("feedbackForm");
+
+if (feedbackFormEl) {
+  feedbackFormEl.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const messageBox = document.getElementById("feedbackMessage");
+    const btn = feedbackFormEl.querySelector("button");
+
+    const name = document.getElementById("feedback-name").value.trim();
+    const email = document.getElementById("feedback-email").value.trim();
+    const message = document.getElementById("feedback-message").value.trim();
+
+    if (!name || !email || !message) {
+      alert("All fields are required");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerText = "Sending...";
+
+    try {
+      const res = await fetch("https://tallow-and-care-official.onrender.com/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message })
+      });
+
+      if (!res.ok) throw new Error("Request failed");
+
       messageBox.classList.remove("hidden");
-      messageBox.style.opacity = "0";
-      setTimeout(() => { messageBox.style.opacity = "1"; }, 50);
-      this.reset();
-      setTimeout(() => { messageBox.style.opacity = "0"; setTimeout(() => messageBox.classList.add("hidden"), 400); }, 4000);
-    });
-  }
+      feedbackFormEl.reset();
+
+      setTimeout(() => {
+        messageBox.classList.add("hidden");
+      }, 4000);
+
+    } catch (err) {
+      alert("Failed to send feedback. Try again.");
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Send Feedback";
+    }
+  });
+}
 
   /* -------------------------
      Notify form handler (guarded)
