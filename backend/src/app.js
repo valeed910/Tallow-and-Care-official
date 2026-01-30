@@ -3,10 +3,8 @@ import cors from "cors";
 import contactRoute from "./routes/contact.js";
 import rateLimit from "express-rate-limit";
 import adminRoutes from "./routes/admin.js";
-import feedbackRoutes from "./routes/feedbackRoutes.js";
 
 const app = express();
-app.use("/api/feedback", feedbackRoutes);
 
 app.set("trust proxy", 1);
 

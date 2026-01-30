@@ -11,8 +11,11 @@ router.use(rateLimit({
 }));
 
 
+let resend = null;
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+if (process.env.RESEND_API_KEY) {
+  resend = new Resend(process.env.RESEND_API_KEY);
+}
 
 router.post("/", async (req, res) => {
   try {
@@ -33,18 +36,20 @@ router.post("/", async (req, res) => {
 
 
     // 3️⃣ SEND EMAIL
-    await resend.emails.send({
-      from: "Tallow & Care <contact@tallowandcare.in>",
-      to: ["tallowandcare@gmail.com"],
-      subject: `New Contact: ${interest || "General"}`,
-      html: `
-        <p>Name: ${name}</p>
-        <p>Email: ${email}</p>
-        <p>Phone: ${phone}</p>
-        <p>Interest: ${interest}</p>
-        <p>Message: ${message}</p>
-      `
-    });
+    if (resend) {
+  await resend.emails.send({
+    from: "Tallow & Care <contact@tallowandcare.in>",
+    to: ["tallowandcare@gmail.com"],
+    subject: `New Contact: ${interest || "General"}`,
+    html: `
+      <p>Name: ${name}</p>
+      <p>Email: ${email}</p>
+      <p>Phone: ${phone}</p>
+      <p>Interest: ${interest}</p>
+      <p>Message: ${message}</p>
+    `
+  });
+}
 
     res.json({ success: true });
   } catch (err) {
