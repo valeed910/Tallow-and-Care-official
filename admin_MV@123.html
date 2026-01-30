@@ -98,7 +98,7 @@ async function loadMessages() {
 async function deleteMsg(id) {
   if (!confirm("Delete message?")) return;
 
-  await fetch(`/api/admin/messages/${id}`, {
+  await fetch(`https://tallow-and-care-official.onrender.com/api/admin/messages/${id}`, {
     method: "DELETE",
     headers: {
       "x-admin-token": localStorage.getItem("adminToken")
