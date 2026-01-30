@@ -1,6 +1,47 @@
-<h2>Admin Messages</h2>
-<table id="table"></table>
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | Tallow&Care</title>
+
+</head>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+}
+.admin-container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+td, th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+th {
+  background: #111;
+  color: white;
+}
+
+  </style>
+
+<body>
+  <div class="admin-container">
+  <h2>Admin Messages</h2>
+  <table id="table"></table>
+  </div>
+
+</body>
+
+  <script>
 async function login() {
   const password = prompt("Enter admin password");
 
@@ -10,10 +51,10 @@ async function login() {
     body: JSON.stringify({ password })
   });
 
-if (!res.ok) {
-  alert("Wrong password");
-  return;
-}
+  if (!res.ok) {
+    alert("Wrong password");
+    return;
+  }
 
   localStorage.setItem("adminToken", "ok");
   loadMessages();
@@ -27,9 +68,47 @@ async function loadMessages() {
   });
 
   const data = await res.json();
-  console.log(data);
+  const table = document.getElementById("table");
+
+  // HEADER
+  table.innerHTML = `
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Message</th>
+      <th>Action</th>
+    </tr>
+  `;
+
+  // ROWS
+  data.forEach(m => {
+    table.innerHTML += `
+      <tr>
+        <td>${m.name}</td>
+        <td>${m.email}</td>
+        <td>${m.message}</td>
+        <td>
+          <button onclick="deleteMsg('${m._id}')">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+async function deleteMsg(id) {
+  if (!confirm("Delete message?")) return;
+
+  await fetch(`/api/admin/messages/${id}`, {
+    method: "DELETE",
+    headers: {
+      "x-admin-token": localStorage.getItem("adminToken")
+    }
+  });
+
+  loadMessages(); // refresh
 }
 
 login();
 </script>
 
+</html>
