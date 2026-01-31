@@ -417,7 +417,7 @@ window.handleContact = async function (e) {
   if (!validateForm()) return;
 
   try {
-    const res = await fetch("https://tallow-and-care-official.onrender.com/api/contact", {
+    const res = await fetch(`${API}/api/contact`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

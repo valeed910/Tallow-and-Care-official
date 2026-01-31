@@ -97,10 +97,11 @@
 </body>
 
   <script>
+    const API = "https://api.tallowandcare.in";
     let page = 1;
     async function login() {
       const password = prompt("Enter admin password");
-      const res = await fetch("https://tallow-and-care-official.onrender.com/api/admin/login", {
+      const res = await fetch(`${API}/api/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password })
@@ -114,8 +115,7 @@
     }
 
     async function loadMessages() {
-      const res = await fetch(
-        `https://tallow-and-care-official.onrender.com/api/admin/messages?page=${page}`,
+      const res = await fetch(`${API}/api/admin/messages?page=${page}`,
         {
           headers: {
             "x-admin-token": localStorage.getItem("adminToken")
@@ -154,7 +154,7 @@
 
     async function deleteMsg(id) {
       if (!confirm("Delete message?")) return;
-      await fetch(`https://tallow-and-care-official.onrender.com/api/admin/messages/${id}`, {
+      await fetch(`${API}/api/admin/messages/${id}`, {
         method: "DELETE",
         headers: {
           "x-admin-token": localStorage.getItem("adminToken")
@@ -175,6 +175,10 @@
       }
     }
 
-    login();
+    if (localStorage.getItem("adminToken")) {
+  loadMessages();
+} else {
+  login();
+}
   </script>
 </html>

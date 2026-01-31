@@ -10,8 +10,12 @@ app.set("trust proxy", 1);
 
 // middleware
 app.use(cors({
-  origin: "*"
+  origin: [
+    "https://tallowandcare.in",
+    "https://www.tallowandcare.in"
+  ]
 }));
+
 
 app.use(express.json());
 app.post("/api/admin/login", (req, res) => {
