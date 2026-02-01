@@ -1,3 +1,4 @@
+const API = "https://api.tallowandcare.in";
 const products = []; // placeholder data
 console.log("Products coming soon", products);
 
