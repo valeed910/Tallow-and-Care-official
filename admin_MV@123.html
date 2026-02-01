@@ -97,88 +97,100 @@
 </body>
 
   <script>
-    const API = "https://api.tallowandcare.in";
-    let page = 1;
-    async function login() {
-      const password = prompt("Enter admin password");
-      const res = await fetch(`${API}/api/admin/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password })
-      });
-      if (!res.ok) {
-        alert("Wrong password");
-        return;
-      }
-      localStorage.setItem("adminToken", "ok");
-      loadMessages();
+  const API = "https://api.tallowandcare.in";
+  const ADMIN_KEY = "Supersecret@123"; // must match Render ADMIN_KEY
+  let page = 1;
+
+  async function loginAndLoad() {
+    const password = prompt("Enter admin password");
+
+    if (!password) {
+      alert("Password required");
+      return;
     }
 
-    async function loadMessages() {
-      const res = await fetch(`${API}/api/admin/messages?page=${page}`, {
-        headers: {
-          "x-admin-key": "Supersecret@123"
-        }
+    // verify password with backend
+    const res = await fetch(`${API}/api/admin/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password })
     });
 
-  if (!res.ok) {
-    const err = await res.text();
-    alert("ADMIN ERROR: " + err);
-    return;
+    if (!res.ok) {
+      alert("Wrong password");
+      return;
+    }
+
+    // password correct → load data
+    loadMessages();
   }
 
-  const data = await res.json();
-      const table = document.getElementById("table");
-      table.style.animation = "fadeIn 0.3s ease";
-  
-      // HEADER
-      table.innerHTML = `
+  async function loadMessages() {
+    const res = await fetch(`${API}/api/admin/messages?page=${page}`, {
+      headers: {
+        "x-admin-key": ADMIN_KEY
+      }
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      alert("ADMIN ERROR: " + err);
+      return;
+    }
+
+    const data = await res.json();
+    const table = document.getElementById("table");
+
+    table.innerHTML = `
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Message</th>
+        <th>Action</th>
+      </tr>
+    `;
+
+    data.forEach(m => {
+      table.innerHTML += `
         <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Message</th>
-          <th>Action</th>
+          <td>${m.name}</td>
+          <td>${m.email}</td>
+          <td>${m.message}</td>
+          <td>
+            <button onclick="deleteMsg('${m._id}')">Delete</button>
+          </td>
         </tr>
       `;
+    });
+  }
 
-      // ROWS
-      data.forEach(m => {
-        table.innerHTML += `
-          <tr>
-            <td>${m.name}</td>
-            <td>${m.email}</td>
-            <td>${m.message}</td>
-            <td>
-              <button onclick="deleteMsg('${m._id}')">Delete</button>
-            </td>
-          </tr>
-        `;
-      });
-    }
+  async function deleteMsg(id) {
+    if (!confirm("Delete message?")) return;
 
-    async function deleteMsg(id) {
-      if (!confirm("Delete message?")) return;
-      await fetch(`${API}/api/admin/messages/${id}`, {
-        method: "DELETE",
-        headers: {
-          "x-admin-key": "Supersecret@123"
-        }
-      });
-      loadMessages(); // refresh
-    }
+    await fetch(`${API}/api/admin/messages/${id}`, {
+      method: "DELETE",
+      headers: {
+        "x-admin-key": ADMIN_KEY
+      }
+    });
 
-    function nextPage() {
-      page++;
+    loadMessages();
+  }
+
+  function nextPage() {
+    page++;
+    loadMessages();
+  }
+
+  function prevPage() {
+    if (page > 1) {
+      page--;
       loadMessages();
     }
+  }
 
-    function prevPage() {
-      if (page > 1) {
-        page--;
-        loadMessages();
-      }
-    }
+  // 🚀 start flow
+  loginAndLoad();
+</script>
 
-  login();
-  </script>
 </html>

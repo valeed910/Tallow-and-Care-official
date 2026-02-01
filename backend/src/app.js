@@ -21,7 +21,7 @@ app.use(express.json());
 app.post("/api/admin/login", (req, res) => {
   const { password } = req.body;
 
-  if (password !== process.env.ADMIN_PASSWORD) {
+  if (password !== process.env.ADMIN_KEY) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
