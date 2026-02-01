@@ -115,15 +115,19 @@
     }
 
     async function loadMessages() {
-      const res = await fetch(`${API}/api/admin/messages?page=${page}`,
-        {
-          headers: {
-            "x-admin-key": "Supersecret@123"
-          } 
+      const res = await fetch(`${API}/api/admin/messages?page=${page}`, {
+        headers: {
+          "x-admin-key": "Supersecret@123"
         }
-      );
+    });
 
-      const data = await res.json();
+  if (!res.ok) {
+    const err = await res.text();
+    alert("ADMIN ERROR: " + err);
+    return;
+  }
+
+  const data = await res.json();
       const table = document.getElementById("table");
       table.style.animation = "fadeIn 0.3s ease";
   
