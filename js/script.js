@@ -5,8 +5,8 @@ console.log("Products coming soon", products);
 // script.js — cleaned & optimized for Tallow & Care
 document.addEventListener('DOMContentLoaded', () => {
   if (!('IntersectionObserver' in window)) {
-  console.warn('IntersectionObserver not supported');
-  return;
+    console.warn('IntersectionObserver not supported');
+    return;
   }
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => Array.from(document.querySelectorAll(s));
@@ -19,34 +19,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const styleEl = document.createElement('style');
     styleEl.id = runtimeStyleId;
     styleEl.textContent = `
-/* clickable flipped support */
-.interactive-card.flipped .card-inner,
-.benefit-card.flipped .card-inner,
-.product-card.flipped .card-inner,
-.sustainability-item.flipped .card-inner {
-  transform: rotateY(180deg) !important;
-}
+    /* clickable flipped support */
+    .interactive-card.flipped .card-inner,
+    .benefit-card.flipped .card-inner,
+    .product-card.flipped .card-inner,
+    .sustainability-item.flipped .card-inner {
+      transform: rotateY(180deg) !important;
+    }
 
-/* back-to-top show/hide */
-.back-to-top { opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; transform: translateY(0); }
-.back-to-top.visible { opacity: 1; pointer-events: auto; transform: translateY(-6px); }
+    /* back-to-top show/hide */
+    .back-to-top { opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; transform: translateY(0); }
+    .back-to-top.visible { opacity: 1; pointer-events: auto; transform: translateY(-6px); }
 
-/* runtime ripple */
-.btn-ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.45);
-  transform: translate(-50%,-50%) scale(0);
-  pointer-events: none;
-  z-index: 2;
-  animation: tallow-ripple 700ms cubic-bezier(.2,.8,.2,1) forwards;
-}
-@keyframes tallow-ripple {
-  to { transform: translate(-50%,-50%) scale(18); opacity: 0; }
-}
-    `;
-    document.head.appendChild(styleEl);
-  }
+    /* runtime ripple */
+    .btn-ripple { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.45); transform: translate(-50%,-50%) scale(0); pointer-events: none; z-index: 2; animation: tallow-ripple 700ms cubic-bezier(.2,.8,.2,1) forwards; }
+    @keyframes tallow-ripple { to { transform: translate(-50%,-50%) scale(18); opacity: 0; } }
+      `;
+      document.head.appendChild(styleEl);
+    }
 
   /* -------------------------
      Utility: throttle
@@ -339,133 +329,128 @@ document.addEventListener('DOMContentLoaded', () => {
      Contact form validation & submit (handleContact referenced in HTML)
      ------------------------- */
   const contactForm = document.querySelector('.contact-form');
-if (contactForm) {
+  if (contactForm) {
+    const $ = (s) => document.querySelector(s);
+    const fields = {
+      name: $('#name'),
+      email: $('#email'),
+      phone: $('#phone'),
+      interest: $('#interest'),
+      message: $('#message')
+    };
 
-  const $ = (s) => document.querySelector(s);
+    const errs = {
+      name: $('#name-error'),
+      email: $('#email-error'),
+      phone: $('#phone-error'),
+      interest: $('#interest-error'),
+      message: $('#message-error')
+    };
 
-  const fields = {
-    name: $('#name'),
-    email: $('#email'),
-    phone: $('#phone'),
-    interest: $('#interest'),
-    message: $('#message')
-  };
+    const statusDiv = $('#form-status');
 
-  const errs = {
-    name: $('#name-error'),
-    email: $('#email-error'),
-    phone: $('#phone-error'),
-    interest: $('#interest-error'),
-    message: $('#message-error')
-  };
-
-  const statusDiv = $('#form-status');
-
-  function showError(name, msg) {
-    if (errs[name]) errs[name].textContent = msg;
-    if (fields[name]) fields[name].classList.add('error');
-  }
-
-  function clearError(name) {
-    if (errs[name]) errs[name].textContent = '';
-    if (fields[name]) fields[name].classList.remove('error');
-  }
-
-  function validateField(name, value) {
-    clearError(name);
-
-    if (name === 'name' && !value.trim()) {
-      showError(name, 'Name is required.');
-      return false;
+    function showError(name, msg) {
+      if (errs[name]) errs[name].textContent = msg;
+      if (fields[name]) fields[name].classList.add('error');
     }
 
-    if (name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      showError(name, 'A valid email is required.');
-      return false;
+    function clearError(name) {
+      if (errs[name]) errs[name].textContent = '';
+      if (fields[name]) fields[name].classList.remove('error');
     }
 
-    if (name === 'interest' && !value) {
-      showError(name, 'Please select an interest.');
-      return false;
-    }
+    function validateField(name, value) {
+      clearError(name);
 
-    if (name === 'message') {
-      if (!value.trim()) {
-        showError(name, 'A message is required.');
+      if (name === 'name' && !value.trim()) {
+        showError(name, 'Name is required.');
         return false;
       }
-      if (value.trim().length < 10) {
-        showError(name, 'Message must be at least 10 characters.');
+
+      if (name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        showError(name, 'A valid email is required.');
         return false;
       }
+
+      if (name === 'interest' && !value) {
+        showError(name, 'Please select an interest.');
+        return false;
+      }
+
+      if (name === 'message') {
+        if (!value.trim()) {
+          showError(name, 'A message is required.');
+          return false;
+        }
+        if (value.trim().length < 10) {
+          showError(name, 'Message must be at least 10 characters.');
+          return false;
+        }
+      }
+      return true;
     }
 
-    return true;
-  }
-
-  function validateForm() {
-    let valid = true;
-    for (const key of Object.keys(fields)) {
-      if (!validateField(key, fields[key].value)) valid = false;
+    function validateForm() {
+      let valid = true;
+      for (const key of Object.keys(fields)) {
+        if (!validateField(key, fields[key].value)) valid = false;
+      }
+      return valid;
     }
-    return valid;
-  }
-window.handleContact = async function (e) {
-  e.preventDefault();
-  statusDiv.textContent = "";
-  statusDiv.className = "form-status";
+  window.handleContact = async function (e) {
+    e.preventDefault();
+    statusDiv.textContent = "";
+    statusDiv.className = "form-status";
 
-  if (!validateForm()) return;
-
-  try {
-    const res = await fetch(`${API}/api/contact`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: fields.name.value,
-        email: fields.email.value,
-        phone: fields.phone.value,
-        interest: fields.interest.value,
-        message: fields.message.value
-      })
-
-    });
-
-    const text = await res.text(); // read ONCE
-    let data;
-
+    if (!validateForm()) return;
     try {
-      data = JSON.parse(text);
-    } catch {
-      data = { error: text };
-    }
+      const res = await fetch(`${API}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fields.name.value,
+          email: fields.email.value,
+          phone: fields.phone.value,
+          interest: fields.interest.value,
+          message: fields.message.value
+        })
+      });
 
-    if (!res.ok) {
-      throw new Error(data.error || "Request failed");
-    }
+      const text = await res.text(); // read ONCE
+      let data;
 
-    statusDiv.textContent = "Message sent successfully!";
-    statusDiv.className = "form-status success";
-    contactForm.reset();
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = { error: text };
+      }
 
-  } catch (err) {
-    statusDiv.textContent = err.message || "Something went wrong";
-    statusDiv.className = "form-status error";
-  }
-};
+      if (!res.ok) {
+        throw new Error(data.error || "Request failed");
+      }
+
+      statusDiv.textContent = "Message sent successfully!";
+      statusDiv.className = "form-status success";
+      contactForm.reset();
+
+    } catch (err) {
+        statusDiv.textContent = err.message || "Something went wrong";
+        statusDiv.className = "form-status error";
+      }
+  };
 
 
 
   /* -------------------------
      Feedback form (guarded)
      ------------------------- */
-const feedbackFormEl = document.getElementById("feedbackForm"); 
-if (feedbackFormEl) { feedbackFormEl.addEventListener("submit", function(e) { e.preventDefault();
-   const messageBox = document.getElementById("feedbackMessage"); 
-   if (!messageBox) return; messageBox.classList.remove("hidden"); 
-   messageBox.style.opacity = "0"; 
-   setTimeout(() => { messageBox.style.opacity = "1"; }, 50); 
-   this.reset(); setTimeout(() => { messageBox.style.opacity = "0"; 
+  const feedbackFormEl = document.getElementById("feedbackForm"); 
+  if (feedbackFormEl) { feedbackFormEl.addEventListener("submit", function(e) { e.preventDefault();
+    const messageBox = document.getElementById("feedbackMessage"); 
+    if (!messageBox) return; messageBox.classList.remove("hidden"); 
+    messageBox.style.opacity = "0"; 
+    setTimeout(() => { messageBox.style.opacity = "1"; }, 50); 
+    this.reset(); setTimeout(() => { messageBox.style.opacity = "0"; 
     setTimeout(() => messageBox.classList.add("hidden"), 400); }, 4000); 
   }); 
 }
