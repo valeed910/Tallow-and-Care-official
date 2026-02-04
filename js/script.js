@@ -63,6 +63,10 @@ console.log("Products coming soon", products);
 
 // script.js — cleaned & optimized for Tallow & Care
 document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector(".contact-form");
+  if (!form) return;
+
+  form.addEventListener("submit", handleContact);
   if (!('IntersectionObserver' in window)) {
     console.warn('IntersectionObserver not supported');
     return;
