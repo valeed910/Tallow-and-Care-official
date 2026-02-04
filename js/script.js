@@ -388,21 +388,6 @@ document.addEventListener('DOMContentLoaded', () => {
     typingObserver.observe(typingText);
   }
 
-
-  /* -------------------------
-     Feedback form (guarded)
-     ------------------------- */
-  const feedbackFormEl = document.getElementById("feedbackForm"); 
-  if (feedbackFormEl) { feedbackFormEl.addEventListener("submit", function(e) { e.preventDefault();
-    const messageBox = document.getElementById("feedbackMessage"); 
-    if (!messageBox) return; messageBox.classList.remove("hidden"); 
-    messageBox.style.opacity = "0"; 
-    setTimeout(() => { messageBox.style.opacity = "1"; }, 50); 
-    this.reset(); setTimeout(() => { messageBox.style.opacity = "0"; 
-    setTimeout(() => messageBox.classList.add("hidden"), 400); }, 4000); 
-  }); 
-}
-
   /* -------------------------
      Notify form handler (guarded)
      ------------------------- */
