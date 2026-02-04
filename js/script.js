@@ -1,6 +1,10 @@
 const API = "https://api.tallowandcare.in";
 let turnstileToken = null;
 
+  /* -------------------------
+     Contact form validation & submit (handleContact referenced in HTML)
+     ------------------------- */
+
 window.onTurnstileSuccess = function (token) {
   turnstileToken = token;
 };
@@ -379,78 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
     typingObserver.observe(typingText);
   }
 
-  /* -------------------------
-     Contact form validation & submit (handleContact referenced in HTML)
-     ------------------------- */
-  const contactForm = document.querySelector('.contact-form');
-  if (contactForm) {
-    const $ = (s) => document.querySelector(s);
-    const fields = {
-      name: $('#name'),
-      email: $('#email'),
-      phone: $('#phone'),
-      interest: $('#interest'),
-      message: $('#message')
-    };
 
-    const errs = {
-      name: $('#name-error'),
-      email: $('#email-error'),
-      phone: $('#phone-error'),
-      interest: $('#interest-error'),
-      message: $('#message-error')
-    };
-
-    const statusDiv = $('#form-status');
-
-    function showError(name, msg) {
-      if (errs[name]) errs[name].textContent = msg;
-      if (fields[name]) fields[name].classList.add('error');
-    }
-
-    function clearError(name) {
-      if (errs[name]) errs[name].textContent = '';
-      if (fields[name]) fields[name].classList.remove('error');
-    }
-
-    function validateField(name, value) {
-      clearError(name);
-
-      if (name === 'name' && !value.trim()) {
-        showError(name, 'Name is required.');
-        return false;
-      }
-
-      if (name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-        showError(name, 'A valid email is required.');
-        return false;
-      }
-
-      if (name === 'interest' && !value) {
-        showError(name, 'Please select an interest.');
-        return false;
-      }
-
-      if (name === 'message') {
-        if (!value.trim()) {
-          showError(name, 'A message is required.');
-          return false;
-        }
-        if (value.trim().length < 10) {
-          showError(name, 'Message must be at least 10 characters.');
-          return false;
-        }
-      }
-      return true;
-    }
-
-    function validateForm() {
-      let valid = true;
-      for (const key of Object.keys(fields)) {
-        if (!validateField(key, fields[key].value)) valid = false;
-      }
-      return valid;
-    }
   
 
 
