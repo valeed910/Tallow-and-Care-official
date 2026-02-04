@@ -1,4 +1,11 @@
 const API = "https://api.tallowandcare.in";
+let turnstileToken = null;
+
+window.onTurnstileSuccess = function (token) {
+  turnstileToken = token;
+};
+
+
 const products = []; // placeholder data
 console.log("Products coming soon", products);
 
@@ -399,15 +406,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   window.handleContact = async function (e) {
     e.preventDefault();
+
     statusDiv.textContent = "";
     statusDiv.className = "form-status";
 
     if (!validateForm()) return;
-      const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
-        if (!token) {
+    
+      if (!turnstileToken) {
         alert("Captcha not verified");
         return;
       }
+
 
     try {
       const res = await fetch(`${API}/api/contact`, {
@@ -418,22 +427,16 @@ document.addEventListener('DOMContentLoaded', () => {
           email: fields.email.value,
           phone: fields.phone.value,
           interest: fields.interest.value,
-          message: fields.message.value
+          message: fields.message.value,
+          captchaToken: turnstileToken
         })
       });
 
       const text = await res.text(); // read ONCE
       let data;
+      try { data = JSON.parse(text); } catch { data = { error: text }; }
 
-      try {
-        data = JSON.parse(text);
-      } catch {
-        data = { error: text };
-      }
-
-      if (!res.ok) {
-        throw new Error(data.error || "Request failed");
-      }
+      if (!res.ok) throw new Error(data.error || "Request failed");
 
       statusDiv.textContent = "Message sent successfully!";
       statusDiv.className = "form-status success";
