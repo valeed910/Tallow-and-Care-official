@@ -1,14 +1,15 @@
 const API = "https://api.tallowandcare.in";
 let turnstileToken = null;
 
-  /* -------------------------
-     Contact form validation & submit (handleContact referenced in HTML)
-     ------------------------- */
-
 window.onTurnstileSuccess = function (token) {
   turnstileToken = token;
 };
-window.handleContact = async function (e) {
+
+  /* -------------------------
+     Contact form validation & submit (handleContact referenced in HTML)
+     ------------------------- */
+  
+     window.handleContact = async function (e) {
   e.preventDefault();
 
   const statusDiv = document.querySelector("#form-status");
@@ -384,9 +385,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  
-
-
   /* -------------------------
      Feedback form (guarded)
      ------------------------- */
@@ -404,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* -------------------------
      Notify form handler (guarded)
      ------------------------- */
-  const notifyForm = $('#notifyForm');
+  const notifyForm = document.querySelector('#notifyForm');
   if (notifyForm) {
     notifyForm.addEventListener("submit", (ev) => {
       ev.preventDefault();
@@ -456,5 +454,4 @@ document.addEventListener('DOMContentLoaded', () => {
   const yearSpan = $('#year');
   if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
-}
 }); // DOMContentLoaded
