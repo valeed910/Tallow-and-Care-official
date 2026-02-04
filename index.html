@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https://api.tallowandcare.in; ">
     <title>Tallow & Care</title>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -430,6 +432,7 @@
                     <span class="btn-text">Send Message</span>
                     <div class="loading"></div>
                 </button>
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAACXpAx9GaFvDsTYJ"></div>
             </form>
         </div>
     </section>

@@ -3,6 +3,25 @@ import { Resend } from "resend";
 import rateLimit from "express-rate-limit";
 import Message from "../models/message.js";
 
+async function verifyTurnstile(token, ip) {
+  const res = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        secret: process.env.TURNSTILE_SECRET_KEY,
+        response: token,
+        remoteip: ip
+      })
+    }
+  );
+
+  const data = await res.json();
+  return data.success === true;
+}
+
+
 const router = express.Router();
 router.use(rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -17,7 +36,21 @@ if (process.env.RESEND_API_KEY) {
 
 router.post("/", async (req, res) => {
   try {
-    const { name, email, phone, interest, message } = req.body;
+    const { name, email, phone, interest, message, captchaToken } = req.body;
+
+// CAPTCHA check (FIRST)
+  if (!captchaToken) {
+    return res.status(400).json({ error: "Captcha missing" });
+  }
+
+  const isHuman = await verifyTurnstile(
+    captchaToken,
+    req.ip
+  );
+
+  if (!isHuman) {
+    return res.status(403).json({ error: "Captcha verification failed" });
+  }
 
     // NORMAL VALIDATION
     if (!name || !email || !message) {

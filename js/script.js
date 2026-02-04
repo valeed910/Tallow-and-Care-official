@@ -403,6 +403,12 @@ document.addEventListener('DOMContentLoaded', () => {
     statusDiv.className = "form-status";
 
     if (!validateForm()) return;
+      const token = document.querySelector('[name="cf-turnstile-response"]')?.value;
+        if (!token) {
+        alert("Captcha not verified");
+        return;
+      }
+
     try {
       const res = await fetch(`${API}/api/contact`, {
         method: "POST",
