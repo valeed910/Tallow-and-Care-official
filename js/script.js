@@ -10,52 +10,52 @@ window.onTurnstileSuccess = function (token) {
      ------------------------- */
   
      window.handleContact = async function (e) {
-  e.preventDefault();
+      e.preventDefault();
 
-  const statusDiv = document.querySelector("#form-status");
+      const statusDiv = document.querySelector("#form-status");
 
-  const name = document.querySelector("#name")?.value.trim();
-  const email = document.querySelector("#email")?.value.trim();
-  const phone = document.querySelector("#phone")?.value.trim();
-  const interest = document.querySelector("#interest")?.value;
-  const message = document.querySelector("#message")?.value.trim();
+      const name = document.querySelector("#name")?.value.trim();
+      const email = document.querySelector("#email")?.value.trim();
+      const phone = document.querySelector("#phone")?.value.trim();
+      const interest = document.querySelector("#interest")?.value;
+      const message = document.querySelector("#message")?.value.trim();
 
-  if (!name || !email || !message) {
-    statusDiv.textContent = "Please fill all required fields.";
-    statusDiv.className = "form-status error";
-    return;
-  }
+      if (!name || !email || !message) {
+      statusDiv.textContent = "Please fill all required fields.";
+      statusDiv.className = "form-status error";
+      return;
+      }
 
-  if (!turnstileToken) {
-    alert("Captcha not verified");
-    return;
-  }
+      if (!turnstileToken) {
+        alert("Captcha not verified");
+        return;
+      }
 
-  try {
-    const res = await fetch(`${API}/api/contact`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        email,
-        phone,
-        interest,
-        message,
-        captchaToken: turnstileToken
-      })
-    });
+      try {
+        const res = await fetch(`${API}/api/contact`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            email,
+            phone,
+            interest,
+            message,
+            captchaToken: turnstileToken
+          })
+        });
 
-    if (!res.ok) throw new Error("Request failed");
+        if (!res.ok) throw new Error("Request failed");
 
-    statusDiv.textContent = "Message sent successfully!";
-    statusDiv.className = "form-status success";
-    document.querySelector(".contact-form")?.reset();
+        statusDiv.textContent = "Message sent successfully!";
+        statusDiv.className = "form-status success";
+        document.querySelector(".contact-form")?.reset();
 
-  } catch (err) {
-    statusDiv.textContent = "Something went wrong";
-    statusDiv.className = "form-status error";
-  }
-};
+      } catch (err) {
+      statusDiv.textContent = "Something went wrong";
+      statusDiv.className = "form-status error";
+    }
+  };
 
 
 const products = []; // placeholder data
