@@ -47,10 +47,12 @@ router.post("/", async (req, res) => {
     captchaToken,
     req.ip
   );
-
+  console.log("TURNSTILE RESULT:", isHuman);  
   if (!isHuman) {
+    console.log("TOKEN RECEIVED:", captchaToken);
     return res.status(403).json({ error: "Captcha verification failed" });
   }
+
 
     // NORMAL VALIDATION
     if (!name || !email || !message) {
