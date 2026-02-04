@@ -4,6 +4,53 @@ let turnstileToken = null;
 window.onTurnstileSuccess = function (token) {
   turnstileToken = token;
 };
+window.handleContact = async function (e) {
+  e.preventDefault();
+
+  const statusDiv = document.querySelector("#form-status");
+
+  const name = document.querySelector("#name")?.value.trim();
+  const email = document.querySelector("#email")?.value.trim();
+  const phone = document.querySelector("#phone")?.value.trim();
+  const interest = document.querySelector("#interest")?.value;
+  const message = document.querySelector("#message")?.value.trim();
+
+  if (!name || !email || !message) {
+    statusDiv.textContent = "Please fill all required fields.";
+    statusDiv.className = "form-status error";
+    return;
+  }
+
+  if (!turnstileToken) {
+    alert("Captcha not verified");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/api/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        email,
+        phone,
+        interest,
+        message,
+        captchaToken: turnstileToken
+      })
+    });
+
+    if (!res.ok) throw new Error("Request failed");
+
+    statusDiv.textContent = "Message sent successfully!";
+    statusDiv.className = "form-status success";
+    document.querySelector(".contact-form")?.reset();
+
+  } catch (err) {
+    statusDiv.textContent = "Something went wrong";
+    statusDiv.className = "form-status error";
+  }
+};
 
 
 const products = []; // placeholder data
@@ -404,50 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       return valid;
     }
-  window.handleContact = async function (e) {
-    e.preventDefault();
-
-    statusDiv.textContent = "";
-    statusDiv.className = "form-status";
-
-    if (!validateForm()) return;
-    
-      if (!turnstileToken) {
-        alert("Captcha not verified");
-        return;
-      }
-
-
-    try {
-      const res = await fetch(`${API}/api/contact`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: fields.name.value,
-          email: fields.email.value,
-          phone: fields.phone.value,
-          interest: fields.interest.value,
-          message: fields.message.value,
-          captchaToken: turnstileToken
-        })
-      });
-
-      const text = await res.text(); // read ONCE
-      let data;
-      try { data = JSON.parse(text); } catch { data = { error: text }; }
-
-      if (!res.ok) throw new Error(data.error || "Request failed");
-
-      statusDiv.textContent = "Message sent successfully!";
-      statusDiv.className = "form-status success";
-      contactForm.reset();
-
-    } catch (err) {
-        statusDiv.textContent = err.message || "Something went wrong";
-        statusDiv.className = "form-status error";
-      }
-  };
-
+  
 
 
   /* -------------------------
