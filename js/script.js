@@ -50,6 +50,7 @@ window.onTurnstileSuccess = function (token) {
         statusDiv.textContent = "Message sent successfully!";
         statusDiv.className = "form-status success";
         document.querySelector(".contact-form")?.reset();
+        turnstileToken = null;
 
       } catch (err) {
       statusDiv.textContent = "Something went wrong";
