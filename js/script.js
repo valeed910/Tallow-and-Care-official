@@ -311,9 +311,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Click to flip (except on back button)
     card.addEventListener('click', (e) => {
-      if (e.target.closest('.flipped-back, .back-btn')) return;
+      if (e.target.closest('.add-to-cart-btn')) return;
       card.classList.toggle('flipped');
     });
+
 
     // Keyboard support
     card.setAttribute('tabindex', '0');
