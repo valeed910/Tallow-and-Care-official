@@ -22,12 +22,7 @@ async function verifyTurnstile(token, ip) {
   return data.success === true;
 }
 
-
 const router = express.Router();
-router.use(rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 10
-}));
 
 let resend = null;
 
