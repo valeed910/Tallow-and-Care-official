@@ -6,89 +6,45 @@
   <title>Admin Panel | Tallow&Care</title>  
 </head>
   <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: #eaeaea;
-    }
+    body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; background: #f4f6f8; color: #333; }
 
-    .admin-container {
-      max-width: 1000px;
-      margin: 60px auto;
-      background: rgba(20, 20, 30, 0.9);
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
-      backdrop-filter: blur(6px);
-      animation: fadeIn 0.5s ease;
-    }
+    .admin-container { max-width: 900px; margin: 40px auto; background: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 
-    h2 {
-      text-align: center;
-      letter-spacing: 2px;
-      margin-bottom: 20px;
-      color: #00e5ff;
-    }
+    h2 { text-align: center; margin-bottom: 20px; color: #222; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      overflow: hidden;
-      border-radius: 12px;
-    }
+/* Table */
 
-    th {
-      background: #00e5ff;
-      color: #000;
-      text-transform: uppercase;
-      font-size: 13px;
-      padding: 12px;
-    }
+    .table-wrapper { overflow-x: auto; }
 
-    td {
-      padding: 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      font-size: 14px;
-    }
+    table { width: 100%; border-collapse: collapse; min-width: 600px; }
 
-    tr:hover {
-      background: rgba(0, 229, 255, 0.08);
-      transition: 0.2s;
-    }
+    th { background: #007bff; color: white; padding: 12px; text-align: left; font-size: 14px; }
 
-    button {
-      background: linear-gradient(135deg, #00e5ff, #00bcd4);
-      border: none;
-      color: #000;
-      padding: 6px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.2s;
-    }
+    td { padding: 10px; border-bottom: 1px solid #ddd; font-size: 14px; }
 
-    button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 10px #00e5ff;
-    }
+    tr:hover { background: #f1f1f1; }
 
-    .pagination {
-      text-align: center;
-      margin-top: 20px;
-    }
+/* Button */
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    button { background: #007bff; border: none; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; }
 
-  </style>
+    button:hover { background: #0056b3; }
+
+/* Pagination */
+
+    .pagination { text-align: center; margin-top: 20px; }
+
+/* Mobile */
+
+  @media (max-width: 600px) { .admin-container { margin: 20px; padding: 15px; } h2 { font-size: 20px; } th, td { font-size: 12px; padding: 8px; } button { padding: 5px 10px; font-size: 12px; } }
+</style>
 
 <body>
   <div class="admin-container">
     <h2> Admin Control Panel</h2>
+    <div class="table-wrapper">
     <table id="table"></table>
+    </div>
     <div class="pagination">
       <button onclick="prevPage()">⬅ Prev</button>
       <button onclick="nextPage()">Next ➡</button>
@@ -98,21 +54,19 @@
 
   <script>
   const API = "https://api.tallowandcare.in";
-  const ADMIN_KEY = "Supersecret@123"; // must match Render ADMIN_KEY
+  let adminToken = ""; 
   let page = 1;
 
   async function loginAndLoad() {
     const password = prompt("Enter admin password");
 
-    if (!password) {
-      alert("Password required");
-      return;
-    }
+    if (!password) return;
 
-    // verify password with backend
     const res = await fetch(`${API}/api/admin/login`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({ password })
     });
 
@@ -120,6 +74,9 @@
       alert("Wrong password");
       return;
     }
+  
+    const data = await res.json();
+    adminToken = data.token;
 
     // password correct → load data
     loadMessages();
@@ -128,13 +85,12 @@
   async function loadMessages() {
     const res = await fetch(`${API}/api/admin/messages?page=${page}`, {
       headers: {
-        "x-admin-key": ADMIN_KEY
+        "x-admin-key": adminToken
       }
     });
 
     if (!res.ok) {
-      const err = await res.text();
-      alert("ADMIN ERROR: " + err);
+      alert("Unauthorized");
       return;
     }
 
@@ -170,7 +126,7 @@
     await fetch(`${API}/api/admin/messages/${id}`, {
       method: "DELETE",
       headers: {
-        "x-admin-key": ADMIN_KEY
+        "x-admin-key": adminToken
       }
     });
 
@@ -189,7 +145,7 @@
     }
   }
 
-  // 🚀 start flow
+  //  start flow
   loginAndLoad();
 </script>
 
