@@ -1,3 +1,4 @@
+import helmet from "helmet";
 import express from "express";
 import cors from "cors";
 import contactRoute from "./routes/contact.js";
@@ -5,6 +6,7 @@ import rateLimit from "express-rate-limit";
 import adminRoutes from "./routes/admin.js";
 
 const app = express();
+app.use(helmet());
 
 app.set("trust proxy", 1);
 
