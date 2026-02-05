@@ -1,3 +1,4 @@
+import xss from "xss";
 import express from "express";
 import { Resend } from "resend";
 import rateLimit from "express-rate-limit";
@@ -55,15 +56,18 @@ router.post("/", async (req, res) => {
 
 
     // NORMAL VALIDATION
-    if (!name || !email || !message) {
-      return res.status(400).json({ error: "Missing fields" });
-    }
+    const cleanName = xss(name);
+    const cleanEmail = xss(email);
+    const cleanPhone = xss(phone);
+    const cleanInterest = xss(interest);
+    const cleanMessage = xss(message);
+
     await Message.create({
-      name,
-      email,
-      phone,
-      interest,
-      message
+      name: cleanName,
+      email: cleanEmail,
+      phone: cleanPhone,
+      interest: cleanInterest,
+      message: cleanMessage
     });
 
 
@@ -74,11 +78,11 @@ router.post("/", async (req, res) => {
         to: ["tallowandcare@gmail.com"],
         subject: `New Contact: ${interest || "General"}`,
         html: `
-          <p>Name: ${name}</p>
-          <p>Email: ${email}</p>
-          <p>Phone: ${phone}</p>
-          <p>Interest: ${interest}</p>
-          <p>Message: ${message}</p>
+          <p>Name: ${cleanName}</p>
+          <p>Email: ${cleanEmail}</p>
+          <p>Phone: ${cleanPhone}</p>
+          <p>Interest: ${cleanInterest}</p>
+          <p>Message: ${cleanMessage}</p>
         `
       });
     }
