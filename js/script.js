@@ -308,37 +308,80 @@ document.addEventListener('DOMContentLoaded', () => {
   const benefitCards = $$('.benefit-card') || [];
   benefitCards.forEach(card => {
     const backBtn = card.querySelector('.flipped-back');
-
-    // Click to flip (except on back button)
-    card.addEventListener('click', (e) => {
-      if (e.target.closest('.add-to-cart-btn')) return;
-      card.classList.toggle('flipped');
     });
-
+    const productCards = document.querySelectorAll('.product-card');
+    productCards.forEach(card => {
+    // Click to flip (except on back button)
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.add-to-cart-btn')) return;
+        card.classList.toggle('flipped');
+      });
 
     // Keyboard support
-    card.setAttribute('tabindex', '0');
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        card.classList.toggle('flipped');
-      }
-    });
+      card.setAttribute('tabindex', '0');
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          card.classList.toggle('flipped');
+        }
+      });
 
     // Hover flip for desktop only
-    const handleMouseEnter = () => { if (window.innerWidth > 768) card.classList.add('flipped'); };
-    const handleMouseLeave = () => { if (window.innerWidth > 768) card.classList.remove('flipped'); };
-
-    card.addEventListener('mouseenter', handleMouseEnter);
-    card.addEventListener('mouseleave', handleMouseLeave);
-
-    if (backBtn) {
-      backBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        card.classList.remove('flipped');
+      card.addEventListener('mouseenter', () => {
+        if (window.innerWidth > 768) card.classList.add('flipped');
       });
+      card.addEventListener('mouseleave', () => {
+        if (window.innerWidth > 768) card.classList.remove('flipped');
+      });
+    });
+
+    const CART_KEY = 'tallow_cart';
+
+    function getCart() {
+      return JSON.parse(localStorage.getItem(CART_KEY)) || [];
     }
-  });
+
+    function saveCart(cart) {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      updateCartCount();
+    }
+
+    function addToCart(product) {
+      const cart = getCart();
+      const existing = cart.find(item => item.id === product.id);
+
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+
+      saveCart(cart);
+    }
+
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        const card = btn.closest('.product-card');
+
+        const product = {
+          id: card.dataset.id,
+          name: card.dataset.name,
+          price: Number(card.dataset.price)
+        };
+
+        addToCart(product);
+      });
+    });
+    function updateCartCount() {
+      const cart = getCart();
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      const el = document.getElementById('cart-count');
+      if (el) el.textContent = count;
+    }
+
+    updateCartCount(); // on page load
 
   /* -------------------------
      Ripple effect (pointerdown) with touch fallback
