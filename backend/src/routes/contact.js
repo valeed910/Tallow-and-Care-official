@@ -1,7 +1,6 @@
 import xss from "xss";
 import express from "express";
 import { Resend } from "resend";
-import rateLimit from "express-rate-limit";
 import Message from "../models/message.js";
 
 async function verifyTurnstile(token, ip) {
