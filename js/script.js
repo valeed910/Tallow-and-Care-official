@@ -309,31 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
   benefitCards.forEach(card => {
     const backBtn = card.querySelector('.flipped-back');
     });
-    const productCards = document.querySelectorAll('.product-card');
-    productCards.forEach(card => {
-    // Click to flip (except on back button)
-      card.addEventListener('click', (e) => {
-        if (e.target.closest('.add-to-cart-btn')) return;
-        card.classList.toggle('flipped');
-      });
-
-    // Keyboard support
-      card.setAttribute('tabindex', '0');
-      card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          card.classList.toggle('flipped');
-        }
-      });
-
-    // Hover flip for desktop only
-      card.addEventListener('mouseenter', () => {
-        if (window.innerWidth > 768) card.classList.add('flipped');
-      });
-      card.addEventListener('mouseleave', () => {
-        if (window.innerWidth > 768) card.classList.remove('flipped');
-      });
-    });
+    
 
     const CART_KEY = 'tallow_cart';
 
