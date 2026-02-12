@@ -1,7 +1,7 @@
 const API = "https://api.tallowandcare.in";
 let turnstileToken = null;
-
 window.onTurnstileSuccess = function (token) {
+  console.log("TURNSTILE TOKEN:", token);
   turnstileToken = token;
 };
 
