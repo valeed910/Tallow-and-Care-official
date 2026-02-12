@@ -264,6 +264,57 @@ document.addEventListener('DOMContentLoaded', () => {
   setupCounters('.counter-value, .stat-number, .metric-number');
 
   /* -------------------------
+  Add to Cart 
+  ----------------------------*/
+  const cartIcon = document.getElementById('cart-button');
+  const cartPanel = document.getElementById('cart-panel');
+  const cartClose = document.getElementById('cart-close');
+  const cartItemsEl = document.getElementById('cart-items');
+  const cartTotalEl = document.getElementById('cart-total');
+
+  function getCart(){
+    return JSON.parse(localStorage.getItem('tallow_cart')) || [];
+  }
+
+  function renderCart(){
+    const cart = getCart();
+    cartItemsEl.innerHTML = '';
+    if (!cart.length) {
+      cartItemsEl.innerHTML = `<div class="cart-empty">🛒 Cart is empty</div>`;
+      cartTotalEl.textContent = 0;
+      return;
+    }
+
+    let total = 0;
+
+    cart.forEach(item => {
+      total += item.price * item.qty;
+      const row = document.createElement('div');
+      row.className = 'cart-row';
+      row.innerHTML = `
+        <span>${item.name} × ${item.qty}</span>
+        <span>₹${item.price * item.qty}</span>
+      `;
+      cartItemsEl.appendChild(row);
+    });
+
+    cartTotalEl.textContent = total;
+  }
+
+  if(cartIcon){
+    cartIcon.addEventListener('click', () => {
+      cartPanel.classList.add('open');
+      renderCart();
+    });
+  }
+
+  if(cartClose){
+    cartClose.addEventListener('click', () => {
+      cartPanel.classList.remove('open');
+    });
+  }
+
+  /* -------------------------
      Mobile menu toggle & accessibility
      ------------------------- */
   const toggle = document.querySelector(".mobile-menu-toggle");

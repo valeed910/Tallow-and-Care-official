@@ -13,7 +13,6 @@
         img-src 'self' data:;
         style-src 'self' 'unsafe-inline';
         ">
-
     <title>Tallow & Care</title>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <link rel="stylesheet" href="css/style.css">
@@ -32,20 +31,34 @@
                 <li><a href="#mission" class="nav-link">Mission</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
-            <div class="cart-icon" aria-label="Cart">
-                <svg viewBox="0 0 24 24" class="cart-svg" aria-hidden="true">
-                    <path d="M6 6h15l-1.5 9h-11z" />
-                    <circle cx="9" cy="21" r="1.5" />
-                    <circle cx="18" cy="21" r="1.5" />
+            
+            <!-- CART BUTTON (THIS WAS MISSING) -->
+            <button class="cart-icon" id="cart-button" aria-label="Cart">
+                <svg class="cart-svg" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm10 
+                    0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM7.2 
+                    14.8l.9-2.3h7.4c.8 0 1.5-.5 1.8-1.2l3.2-7.3H5.2L4.3 
+                    2H1v2h2l3.6 7.6-1.4 3.4c-.1.2-.2.5-.2.8 0 1.1.9 2 
+                    2 2h12v-2H7.4l-.2-.2z"/>
                 </svg>
-                <span id="cart-count">0</span>
-            </div>
+                <span class="cart-badge" id="cart-count">0</span>
+            </button>
             <div class="mobile-menu-toggle">
                 <span></span><span></span><span></span>
             </div>
         </div>
     </nav>
-    
+    <div id="cart-panel" class="cart-panel">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button id="cart-close">✕</button>
+        </div>
+        <div id="cart-items"></div>
+        <div class="cart-footer">
+            <strong>Total: ₹<span id="cart-total">0</span></strong>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section id="home" class="hero hero-video">
         <video autoplay muted loop playsinline preload="auto" class="hero-bg-video">
@@ -355,7 +368,12 @@
             <div class="testimonials-grid">
                 <div class="testimonial-card">
                     <div class="testimonial-header">
-                        <img src="assets/images/user1.jpg" alt="Customer" class="testimonial-avatar">
+                        <div class="testimonial-avatar">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2
+                                        c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+                            </svg>
+                        </div>
                             <div>
                                 <div class="testimonial-name">Nishtha Gupta</div>
                                 <div class="testimonial-role">Dog Owner</div>
@@ -365,7 +383,12 @@
                 </div>
                 <div class="testimonial-card">
                     <div class="testimonial-header">
-                        <img src="assets/images/user2.jpg" alt="Customer" class="testimonial-avatar">
+                        <div class="testimonial-avatar">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2
+                                        c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+                            </svg>
+                        </div>
                             <div>
                                 <div class="testimonial-name">Amaan Ur Rehman</div>
                                 <div class="testimonial-role">Cat Owner</div>
@@ -375,7 +398,12 @@
                 </div>
                 <div class="testimonial-card">
                     <div class="testimonial-header">
-                        <img src="assets/images/user3.jpg" alt="Customer" class="testimonial-avatar">
+                        <div class="testimonial-avatar">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2
+                                        c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+                            </svg>
+                        </div>
                             <div>
                                 <div class="testimonial-name">Maasfa Khan</div>
                                 <div class="testimonial-role">Cat Owner</div>
