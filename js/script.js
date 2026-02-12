@@ -51,8 +51,12 @@ window.onTurnstileSuccess = function (token) {
         statusDiv.className = "form-status success";
         document.querySelector(".contact-form")?.reset();
         turnstileToken = null;
-        
-        if (window.turnstile) turnstile.reset();
+
+        const widget = document.querySelector('.cf-turnstile');
+        if (window.turnstile && widget) {
+          turnstile.reset(widget);
+        }
+
       } catch (err) {
       statusDiv.textContent = "Something went wrong";
       statusDiv.className = "form-status error";
