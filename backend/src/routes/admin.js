@@ -1,19 +1,24 @@
 import express from "express";
 import Message from "../models/message.js";
+import jwt from "jsonwebtoken";
+
+function verifyAdmin(req, res, next) {
+  const auth = req.headers.authorization;
+
+  if (!auth) return res.status(401).json({ error: "No token" });
+
+  try {
+    const token = auth.split(" ")[1];
+    jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  } catch {
+    res.status(401).json({ error: "Invalid token" });
+  }
+}
 
 const router = express.Router();
 
-// simple admin auth
-router.use((req, res, next) => {
-  const key = req.headers["x-admin-key"];
-
-  if (!key || key !== "ok") {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  next();
-});
-
+router.use(verifyAdmin);
 
 // get all messages
 router.get("/messages", async (req, res) => {

@@ -4,6 +4,7 @@ import cors from "cors";
 import contactRoute from "./routes/contact.js";
 import rateLimit from "express-rate-limit";
 import adminRoutes from "./routes/admin.js";
+import jwt from "jsonwebtoken";
 
 const app = express();
 app.use(helmet());
@@ -20,6 +21,14 @@ app.use(cors({
 
 
 app.use(express.json());
+const adminLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+app.use("/api/admin/login", adminLimiter); 
 app.post("/api/admin/login", (req, res) => {
   const { password } = req.body;
 
@@ -27,7 +36,13 @@ app.post("/api/admin/login", (req, res) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  res.json({ token: "ok" });
+  const token = jwt.sign(
+  { role: "admin" },
+  process.env.JWT_SECRET,
+  { expiresIn: "2h" }
+);
+
+  res.json({ token });
 });
 
 app.use("/api/admin", adminRoutes);
@@ -35,7 +50,7 @@ app.use("/api/admin", adminRoutes);
 
 const contactLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 20,
+  max: 5,
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {
