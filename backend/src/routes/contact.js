@@ -32,6 +32,13 @@ if (process.env.RESEND_API_KEY) {
 router.post("/", async (req, res) => {
   try {
     const { name, email, phone, interest, message, captchaToken } = req.body;
+    
+    // ✅ ADD VALIDATION HERE
+    if (!name || !email || !message)
+      return res.status(400).json({ error: "Invalid input" });
+
+    if (message.length > 2000)
+      return res.status(400).json({ error: "Message too long" });
 
 // CAPTCHA check (FIRST)
   if (!captchaToken) {
