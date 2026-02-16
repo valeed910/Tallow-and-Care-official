@@ -275,16 +275,35 @@ document.addEventListener('DOMContentLoaded', () => {
   const cartClose = document.getElementById('cart-close');
   const cartItemsEl = document.getElementById('cart-items');
   const cartTotalEl = document.getElementById('cart-total');
+  const cartOverlay = document.getElementById('cart-overlay');
 
-  function getCart(){
-    return JSON.parse(localStorage.getItem('tallow_cart')) || [];
+  function openCart(){
+    cartPanel.classList.add('open');
+    cartOverlay.classList.add('visible');
+    document.body.classList.add('cart-open');
+    renderCart();
   }
 
+  function closeCart(){
+    cartPanel.classList.remove('open');
+    cartOverlay.classList.remove('visible');
+    document.body.classList.remove('cart-open');
+  }
+
+
+  cartIcon?.addEventListener('click', openCart);
+  cartClose?.addEventListener('click', closeCart);
+  cartOverlay?.addEventListener('click', closeCart);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeCart();
+  });
   function renderCart(){
     const cart = getCart();
     cartItemsEl.innerHTML = '';
+
     if (!cart.length) {
-      cartItemsEl.innerHTML = `<div class="cart-empty">🛒 Cart is empty</div>`;
+      cartItemsEl.innerHTML = `<div class="cart-empty">🛒 Your cart is empty</div>`;
       cartTotalEl.textContent = 0;
       return;
     }
@@ -293,29 +312,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cart.forEach(item => {
       total += item.price * item.qty;
+
       const row = document.createElement('div');
       row.className = 'cart-row';
+
       row.innerHTML = `
-        <span>${item.name} × ${item.qty}</span>
-        <span>₹${item.price * item.qty}</span>
+        <div class="cart-info">
+          <div class="cart-title">${item.name}</div>
+          <div class="cart-price">₹${item.price}</div>
+        </div>
+
+        <div class="cart-controls">
+          <button class="qty-btn minus">−</button>
+          <span>${item.qty}</span>
+          <button class="qty-btn plus">+</button>
+          <button class="remove-btn">✕</button>
+        </div>
       `;
+
+      row.querySelector('.minus').onclick = () => updateQty(item.id, -1);
+      row.querySelector('.plus').onclick = () => updateQty(item.id, 1);
+      row.querySelector('.remove-btn').onclick = () => removeItem(item.id);
+
       cartItemsEl.appendChild(row);
     });
 
     cartTotalEl.textContent = total;
   }
+  function updateQty(id, delta){
+    const row = document.querySelector(`[data-id="${id}"]`);
+    row?.classList.add('updating');
+    const cart = getCart();
+    const item = cart.find(p => p.id === id);
+    if (!item) return;
 
-  if(cartIcon){
-    cartIcon.addEventListener('click', () => {
-      cartPanel.classList.add('open');
-      renderCart();
-    });
+    item.qty += delta;
+    if (item.qty <= 0) return removeItem(id);
+
+    saveCart(cart);
+    renderCart();
+
+    setTimeout(() => row?.classList.remove('updating'), 200);
   }
 
-  if(cartClose){
-    cartClose.addEventListener('click', () => {
-      cartPanel.classList.remove('open');
-    });
+  function removeItem(id){
+    let cart = getCart();
+    cart = cart.filter(p => p.id !== id);
+    saveCart(cart);
+    renderCart();
   }
 
   /* -------------------------

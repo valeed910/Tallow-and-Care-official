@@ -85,7 +85,7 @@
   async function loadMessages() {
     const res = await fetch(`${API}/api/admin/messages?page=${page}`, {
       headers: {
-        "x-admin-key": adminToken
+        "Authorization": `Bearer ${adminToken}`
       }
     });
 
@@ -126,7 +126,7 @@
     await fetch(`${API}/api/admin/messages/${id}`, {
       method: "DELETE",
       headers: {
-        "x-admin-key": adminToken
+        "Authorization": `Bearer ${adminToken}`
       }
     });
 
