@@ -34,10 +34,12 @@ router.post("/", async (req, res) => {
     const { name, email, phone, interest, message, captchaToken } = req.body;
     
     // ✅ ADD VALIDATION HERE
-    if (!name || !email || !message)
-      return res.status(400).json({ error: "Invalid input" });
-
-    if (message.length > 2000)
+    if (typeof name !== "string" || typeof email !== "string" || typeof message !== "string") {
+      return res.status(400).json({ error: "Invalid input types" });
+    }
+    
+    const trimmedMessage = message.trim();
+    if (trimmedMessage.length > 2000)
       return res.status(400).json({ error: "Message too long" });
 
 // CAPTCHA check (FIRST)
@@ -51,17 +53,21 @@ router.post("/", async (req, res) => {
   );
   console.log("TURNSTILE RESULT:", isHuman);  
   if (!isHuman) {
-    console.log("TOKEN RECEIVED:", captchaToken);
     return res.status(403).json({ error: "Captcha verification failed" });
   }
 
-
     // NORMAL VALIDATION
-    const cleanName = xss(name);
-    const cleanEmail = xss(email);
-    const cleanPhone = xss(phone);
-    const cleanInterest = xss(interest);
-    const cleanMessage = xss(message);
+    const cleanName = xss(name.trim());
+    const cleanEmail = xss(email.trim());
+    const cleanPhone = phone ? xss(phone.trim()) : "";
+    const cleanInterest = interest ? xss(interest.trim()) : "";
+    const cleanMessage = xss(message.trim());
+
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cleanEmail)) {
+      return res.status(400).json({ error: "Invalid email" });
+    }
 
     await Message.create({
       name: cleanName,

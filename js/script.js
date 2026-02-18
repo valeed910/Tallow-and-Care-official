@@ -1,8 +1,8 @@
 const API = "https://api.tallowandcare.in";
 let turnstileToken = null;
 window.onTurnstileSuccess = function (token) {
-  console.log("TURNSTILE TOKEN:", token);
   turnstileToken = token;
+  console.log("TURNSTILE TOKEN:", token);
 };
 
   /* -------------------------
@@ -13,7 +13,7 @@ window.onTurnstileSuccess = function (token) {
       e.preventDefault();
 
       const statusDiv = document.querySelector("#form-status");
-
+      if (!statusDiv) return;
       const name = document.querySelector("#name")?.value.trim();
       const email = document.querySelector("#email")?.value.trim();
       const phone = document.querySelector("#phone")?.value.trim();
@@ -52,9 +52,8 @@ window.onTurnstileSuccess = function (token) {
         document.querySelector(".contact-form")?.reset();
         turnstileToken = null;
 
-        const widget = document.querySelector('.cf-turnstile');
-        if (window.turnstile && widget) {
-          turnstile.reset(widget);
+        if (window.turnstile) {
+          turnstile.reset();
         }
 
       } catch (err) {
