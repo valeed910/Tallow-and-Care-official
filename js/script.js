@@ -315,18 +315,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const row = document.createElement('div');
       row.className = 'cart-row';
+      row.dataset.id = item.id;
 
       row.innerHTML = `
-        <div class="cart-info">
-          <div class="cart-title">${item.name}</div>
-          <div class="cart-price">₹${item.price}</div>
+        <div class="cart-thumb">
+          <img src="${item.image}" alt="${item.name}">
         </div>
 
-        <div class="cart-controls">
-          <button class="qty-btn minus">−</button>
-          <span>${item.qty}</span>
-          <button class="qty-btn plus">+</button>
-          <button class="remove-btn">✕</button>
+        <div class="cart-details">
+          <div class="cart-title">${item.name}</div>
+          <div class="cart-price">₹${item.price}</div>
+
+          <div class="cart-controls">
+            <button class="qty-btn minus">−</button>
+            <span class="qty-value">${item.qty}</span>
+            <button class="qty-btn plus">+</button>
+            <button class="remove-btn">Remove</button>
+          </div>
         </div>
       `;
 
@@ -361,6 +366,38 @@ document.addEventListener('DOMContentLoaded', () => {
     saveCart(cart);
     renderCart();
   }
+
+  document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+
+  button.addEventListener('click', () => {
+
+    const card = button.closest('.product-card');
+
+    if (!card) return;
+
+    const product = {
+      id: card.dataset.id,
+      name: card.dataset.name,
+      price: Number(card.dataset.price),
+      image: card.dataset.image,
+      qty: 1
+    };
+
+    const cart = getCart();
+    const existing = cart.find(p => p.id === product.id);
+
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push(product);
+    }
+
+    saveCart(cart);
+    renderCart();
+  });
+
+});
+
 
   /* -------------------------
      Mobile menu toggle & accessibility
