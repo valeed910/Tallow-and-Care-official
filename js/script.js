@@ -277,6 +277,36 @@ document.addEventListener('DOMContentLoaded', () => {
   const cartTotalEl = document.getElementById('cart-total');
   const cartOverlay = document.getElementById('cart-overlay');
 
+  let cartLock = false;
+  let toastTimer;
+  
+  function showCartToast(message = "Added to cart"){
+    const toast = document.getElementById("cart-toast");
+    if (!toast) return Promise.resolve();
+
+    return new Promise(resolve => {
+      clearTimeout(toastTimer);
+
+      toast.classList.remove("done");
+      toast.querySelector(".toast-text").textContent = message;
+
+      toast.classList.add("show");
+
+      toastTimer = setTimeout(() => {
+
+        toast.classList.add("done");   // SHOW TICK
+
+        setTimeout(() => {
+          toast.classList.remove("show", "done");
+          resolve();
+        }, 280); // tick visibility time
+
+      }, 1400);
+
+    });
+  }
+
+
   function openCart(){
     cartPanel.classList.add('open');
     cartOverlay.classList.add('visible');
@@ -369,35 +399,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.add-to-cart-btn').forEach(button => {
 
-  button.addEventListener('click', () => {
+    button.addEventListener('click', async () => {
 
-    const card = button.closest('.product-card');
+      if (cartLock) return;   // PREVENT SPAM
+      cartLock = true;
+      const card = button.closest('.product-card');
 
-    if (!card) return;
+      if (!card) {
+        cartLock = false;
+        return;
+      }
 
-    const product = {
-      id: card.dataset.id,
-      name: card.dataset.name,
-      price: Number(card.dataset.price),
-      image: card.dataset.image,
-      qty: 1
-    };
 
-    const cart = getCart();
-    const existing = cart.find(p => p.id === product.id);
+      const product = {
+        id: card.dataset.id,
+        name: card.dataset.name,
+        price: Number(card.dataset.price),
+        image: card.dataset.image,
+        qty: 1
+      };
 
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push(product);
-    }
+      const cart = getCart();
+      const existing = cart.find(p => p.id === product.id);
 
-    saveCart(cart);
-    renderCart();
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push(product);
+      }
+
+      await showCartToast(); 
+
+      saveCart(cart);
+      renderCart();
+      cartLock = false;
+    });
   });
-
-});
-
 
   /* -------------------------
      Mobile menu toggle & accessibility
@@ -471,21 +508,6 @@ document.addEventListener('DOMContentLoaded', () => {
       saveCart(cart);
     }
 
-    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-
-        const card = btn.closest('.product-card');
-
-        const product = {
-          id: card.dataset.id,
-          name: card.dataset.name,
-          price: Number(card.dataset.price)
-        };
-
-        addToCart(product);
-      });
-    });
     function updateCartCount() {
       const cart = getCart();
       const count = cart.reduce((sum, item) => sum + item.qty, 0);
