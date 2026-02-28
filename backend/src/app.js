@@ -7,9 +7,8 @@ import adminRoutes from "./routes/admin.js";
 import jwt from "jsonwebtoken";
 import authRoutes from "./routes/auth.js";
 
-app.use("/api/auth", authRoutes);
-
 const app = express();
+
 app.use(helmet());
 
 app.set("trust proxy", 1);
@@ -22,8 +21,10 @@ app.use(cors({
   ]
 }));
 
-
 app.use(express.json());
+
+app.use("/api/auth", authRoutes);
+
 const adminLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,
@@ -50,7 +51,6 @@ app.post("/api/admin/login", (req, res) => {
 
 app.use("/api/admin", adminRoutes);
 
-
 const contactLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,
@@ -60,7 +60,6 @@ const contactLimiter = rateLimit({
     res.status(429).json({ error: "Too many requests, slow down" });
   }
 });
-
 
 app.use("/api/contact", contactLimiter);
 
