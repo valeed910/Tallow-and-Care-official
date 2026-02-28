@@ -5,6 +5,9 @@ import contactRoute from "./routes/contact.js";
 import rateLimit from "express-rate-limit";
 import adminRoutes from "./routes/admin.js";
 import jwt from "jsonwebtoken";
+import authRoutes from "./routes/auth.js";
+
+app.use("/api/auth", authRoutes);
 
 const app = express();
 app.use(helmet());
