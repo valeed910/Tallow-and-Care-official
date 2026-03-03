@@ -1,6 +1,7 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import { verifyUser } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -49,6 +50,48 @@ router.post("/register", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
+});
+
+/* ===============================
+   POST /api/auth/login
+================================= */
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(400).json({ error: "Invalid credentials" });
+    }
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(400).json({ error: "Invalid credentials" });
+    }
+
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.json({
+      message: "Login successful",
+      token
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+router.get("/me", verifyUser, async (req, res) => {
+  const user = await User.findById(req.user.id).select("-password");
+  res.json(user);
 });
 
 export default router;

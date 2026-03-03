@@ -68,6 +68,87 @@ console.log("Products coming soon", products);
 
 // script.js — cleaned & optimized for Tallow & Care
 document.addEventListener('DOMContentLoaded', () => {
+  
+  /* =========================
+   Check Login On Page Load
+========================= */
+const token = localStorage.getItem("token");
+const checkoutBtn = document.getElementById("checkoutBtn");
+
+checkoutBtn?.addEventListener("click", async () => {
+  if (!token) {
+    alert("Please login to place order");
+    window.location.href = "login.html";
+    return;
+  }
+  const cart = getCart();
+   if (!cart.length) {
+    alert("Cart is empty");
+    return;
+  }
+  try {
+    const res = await fetch(`${API}/api/orders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      },
+      body: JSON.stringify({ items: cart })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error);
+
+    alert("Order placed successfully!");
+
+    saveCart([]);
+    renderCart();
+
+  } catch (err) {
+    alert("Order failed");
+  }
+});
+if (token) {
+  fetch(`${API}/api/auth/me`, {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  })
+  .then(res => {
+    if (!res.ok) throw new Error("Invalid token");
+    return res.json();
+  })
+  .then(user => {
+    showLoggedInUI(user);
+  })
+  .catch(() => {
+    localStorage.removeItem("token");
+  });
+}
+
+function showLoggedInUI(user) {
+  const navLinks = document.querySelector(".nav-links");
+  if (!navLinks) return;
+
+  // Remove login link
+  const loginLink = navLinks.querySelector('a[href="login.html"]');
+  if (loginLink) loginLink.parentElement.remove();
+
+  const accountItem = document.createElement("li");
+  accountItem.innerHTML = `
+    <a href="#" id="logoutBtn">Logout (${user.name})</a>
+  `;
+
+  navLinks.appendChild(accountItem);
+
+  document.getElementById("logoutBtn").addEventListener("click", (e) => {
+    e.preventDefault();
+    localStorage.removeItem("token");
+    location.reload();
+  });
+}
+
   const form = document.querySelector(".contact-form");
   if (!form) return;
 
@@ -481,19 +562,20 @@ document.addEventListener('DOMContentLoaded', () => {
   benefitCards.forEach(card => {
     const backBtn = card.querySelector('.flipped-back');
     });
-    
-
-    const CART_KEY = 'tallow_cart';
-
-    function getCart() {
-      return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+        
+    function getUserCartKey() {
+      const token = localStorage.getItem("token");
+      if (!token) return "tallow_cart_guest";
+      return "tallow_cart_" + token;
     }
-
+    function getCart() {
+      return JSON.parse(localStorage.getItem(getUserCartKey())) || [];
+    }
+   
     function saveCart(cart) {
-      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      localStorage.setItem(getUserCartKey(), JSON.stringify(cart));
       updateCartCount();
     }
-
     function addToCart(product) {
       const cart = getCart();
       const existing = cart.find(item => item.id === product.id);
