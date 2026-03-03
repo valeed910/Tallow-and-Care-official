@@ -1,5 +1,5 @@
 import express from "express";
-import Order from "../models/Order.js";
+import Order from "../models/orderModel.js";
 import { verifyUser } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
