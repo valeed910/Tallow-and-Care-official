@@ -10,7 +10,9 @@ import orderRoutes from "./routes/order.js";
 
 const app = express();
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false
+}));
 
 app.set("trust proxy", 1);
 
