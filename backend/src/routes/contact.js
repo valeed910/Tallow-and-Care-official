@@ -42,19 +42,19 @@ router.post("/", async (req, res) => {
     if (trimmedMessage.length > 2000)
       return res.status(400).json({ error: "Message too long" });
 
-// CAPTCHA check (FIRST)
-  if (!captchaToken) {
-    return res.status(400).json({ error: "Captcha missing" });
-  }
+    // CAPTCHA check (FIRST)
+    if (!captchaToken) {
+      return res.status(400).json({ error: "Captcha missing" });
+    }
 
-  const isHuman = await verifyTurnstile(
-    captchaToken,
-    req.ip
-  );
-  console.log("TURNSTILE RESULT:", isHuman);  
-  if (!isHuman) {
-    return res.status(403).json({ error: "Captcha verification failed" });
-  }
+    const isHuman = await verifyTurnstile(
+      captchaToken,
+      req.ip
+    );
+    console.log("TURNSTILE RESULT:", isHuman);  
+    if (!isHuman) {
+      return res.status(403).json({ error: "Captcha verification failed" });
+    }
 
     // NORMAL VALIDATION
     const cleanName = xss(name.trim());

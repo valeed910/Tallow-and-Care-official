@@ -36,117 +36,117 @@
 
 /* Mobile */
 
-  @media (max-width: 600px) { .admin-container { margin: 20px; padding: 15px; } h2 { font-size: 20px; } th, td { font-size: 12px; padding: 8px; } button { padding: 5px 10px; font-size: 12px; } }
-</style>
+    @media (max-width: 600px) { .admin-container { margin: 20px; padding: 15px; } h2 { font-size: 20px; } th, td { font-size: 12px; padding: 8px; } button { padding: 5px 10px; font-size: 12px; } }
+  </style>
 
-<body>
-  <div class="admin-container">
-    <h2> Admin Control Panel</h2>
-    <div class="table-wrapper">
-    <table id="table"></table>
+  <body>
+    <div class="admin-container">
+      <h2> Admin Control Panel</h2>
+      <div class="table-wrapper">
+        <table id="table"></table>
+      </div>
+      <div class="pagination">
+        <button onclick="prevPage()">⬅ Prev</button>
+        <button onclick="nextPage()">Next ➡</button>
+      </div>
     </div>
-    <div class="pagination">
-      <button onclick="prevPage()">⬅ Prev</button>
-      <button onclick="nextPage()">Next ➡</button>
-    </div>
-  </div>
-</body>
+  </body>
 
   <script>
-  const API = "https://api.tallowandcare.in";
-  let adminToken = ""; 
-  let page = 1;
+    const API = "https://api.tallowandcare.in";
+    let adminToken = ""; 
+    let page = 1;
 
-  async function loginAndLoad() {
-    const password = prompt("Enter admin password");
+    async function loginAndLoad() {
+      const password = prompt("Enter admin password");
 
-    if (!password) return;
+      if (!password) return;
 
-    const res = await fetch(`${API}/api/admin/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ password })
-    });
+      const res = await fetch(`${API}/api/admin/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ password })
+      });
 
-    if (!res.ok) {
-      alert("Wrong password");
-      return;
-    }
+      if (!res.ok) {
+        alert("Wrong password");
+        return;
+      }
   
-    const data = await res.json();
-    adminToken = data.token;
+      const data = await res.json();
+      adminToken = data.token;
 
     // password correct → load data
-    loadMessages();
-  }
-
-  async function loadMessages() {
-    const res = await fetch(`${API}/api/admin/messages?page=${page}`, {
-      headers: {
-        "Authorization": `Bearer ${adminToken}`
-      }
-    });
-
-    if (!res.ok) {
-      alert("Unauthorized");
-      return;
-    }
-
-    const data = await res.json();
-    const table = document.getElementById("table");
-
-    table.innerHTML = `
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Message</th>
-        <th>Action</th>
-      </tr>
-    `;
-
-    data.forEach(m => {
-      table.innerHTML += `
-        <tr>
-          <td>${m.name}</td>
-          <td>${m.email}</td>
-          <td>${m.message}</td>
-          <td>
-            <button onclick="deleteMsg('${m._id}')">Delete</button>
-          </td>
-        </tr>
-      `;
-    });
-  }
-
-  async function deleteMsg(id) {
-    if (!confirm("Delete message?")) return;
-
-    await fetch(`${API}/api/admin/messages/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Authorization": `Bearer ${adminToken}`
-      }
-    });
-
-    loadMessages();
-  }
-
-  function nextPage() {
-    page++;
-    loadMessages();
-  }
-
-  function prevPage() {
-    if (page > 1) {
-      page--;
       loadMessages();
     }
-  }
+
+    async function loadMessages() {
+      const res = await fetch(`${API}/api/admin/messages?page=${page}`, {
+        headers: {
+          "Authorization": `Bearer ${adminToken}`
+        }
+      });
+
+      if (!res.ok) {
+        alert("Unauthorized");
+        return;
+      }
+
+      const data = await res.json();
+      const table = document.getElementById("table");
+
+      table.innerHTML = `
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Message</th>
+          <th>Action</th>
+        </tr>
+      `;
+
+      data.forEach(m => {
+        table.innerHTML += `
+          <tr>
+            <td>${m.name}</td>
+            <td>${m.email}</td>
+            <td>${m.message}</td>
+            <td>
+              <button onclick="deleteMsg('${m._id}')">Delete</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    async function deleteMsg(id) {
+      if (!confirm("Delete message?")) return;
+
+      await fetch(`${API}/api/admin/messages/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${adminToken}`
+        }
+      });
+
+      loadMessages();
+    }
+
+    function nextPage() {
+      page++;
+      loadMessages();
+    }
+
+    function prevPage() {
+      if (page > 1) {
+        page--;
+        loadMessages();
+      }
+    }
 
   //  start flow
-  loginAndLoad();
-</script>
+    loginAndLoad();
+  </script>
 
 </html>
