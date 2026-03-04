@@ -65,34 +65,8 @@ window.onTurnstileSuccess = function (token) {
 
 const products = []; // placeholder data
 console.log("Products coming soon", products);
-/* =========================
-   PROFILE DATA LOAD
-========================= */
 
-if (token) {
-fetch(`${API}/api/auth/me`, {
-  headers: {
-    Authorization: "Bearer " + token
-  }
-})
-.then(res => res.json())
-.then(user => {
-  document.getElementById("profileName").textContent = user.name;
-  document.getElementById("profileEmail").textContent = user.email;
 
-  document.querySelector(".avatar").src =
-    `https://ui-avatars.com/api/?name=${user.name}&background=2e7d32&color=fff`;
-});
-}
-
-/* =========================
-   LOGOUT
-========================= */
-
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.removeItem("token");
-  location.reload();
-});
 
 // script.js — cleaned & optimized for Tallow & Care
 document.addEventListener('DOMContentLoaded', () => {
@@ -154,59 +128,53 @@ if (token) {
     localStorage.removeItem("token");
   });
 }
-
 function showLoggedInUI(user) {
+
   const navLinks = document.querySelector(".nav-links");
   if (!navLinks) return;
 
-  // Remove login link
   const loginLink = navLinks.querySelector('a[href="login.html"]');
   if (loginLink) loginLink.parentElement.remove();
 
   const accountItem = document.createElement("li");
+
   accountItem.innerHTML = `
-    <li class="profile-menu">
-      <div class="profile-trigger" id="profileTrigger">
-        <img src="https://ui-avatars.com/api/?name=User&background=2e7d32&color=fff" class="avatar">
+  <div class="profile-menu">
+    <div class="profile-trigger" id="profileTrigger">
+      <img class="avatar"
+      src="https://ui-avatars.com/api/?name=${user.name}&background=2e7d32&color=fff">
+    </div>
+
+    <div class="profile-dropdown" id="profileDropdown">
+      <div class="profile-info">
+        <strong>${user.name}</strong>
+        <small>${user.email}</small>
       </div>
 
-      <div class="profile-dropdown" id="profileDropdown">
-        <div class="profile-info">
-          <strong id="profileName">User</strong>
-          <small id="profileEmail">email@example.com</small>
-        </div>
+      <hr>
 
-        <hr>
-
-        <a href="#">My Orders</a>
-        <a href="#">Account Settings</a>
-        <a href="#" id="logoutBtn">Logout</a>
-      </div>
-    </li>
+      <a href="#">My Orders</a>
+      <a href="#">Account Settings</a>
+      <a href="#" id="logoutBtn">Logout</a>
+    </div>
+  </div>
   `;
-
-  // USER DATA PROFILE DROPDOWN SCRIPT
-const trigger = document.getElementById("profileTrigger");
-const dropdown = document.getElementById("profileDropdown");
-
-trigger.addEventListener("click", () => {
-  dropdown.style.display =
-    dropdown.style.display === "block" ? "none" : "block";
-});
-
-document.addEventListener("click", (e) => {
-  if (!trigger.contains(e.target) && !dropdown.contains(e.target)) {
-    dropdown.style.display = "none";
-  }
-});
 
   navLinks.appendChild(accountItem);
 
-  document.getElementById("logoutBtn").addEventListener("click", (e) => {
+  const trigger = document.getElementById("profileTrigger");
+  const dropdown = document.getElementById("profileDropdown");
+
+  trigger.onclick = () => {
+    dropdown.style.display =
+      dropdown.style.display === "block" ? "none" : "block";
+  };
+
+  document.getElementById("logoutBtn").onclick = (e) => {
     e.preventDefault();
     localStorage.removeItem("token");
     location.reload();
-  });
+  };
 }
 
   const form = document.querySelector(".contact-form");
