@@ -26,6 +26,20 @@ nav, .navbar, #navbar { position: fixed; top: 0; left: 0; width: 100%; height: 8
 
 .nav-link:hover::before, .nav-link.active::before { width: 100%; }
 
+.nav-login-item { display: flex; align-items: center; }
+
+.nav-login-btn { padding: 8px 18px; border-radius: 30px; font-size: 14px; font-weight: 600; text-decoration: none; color: #fff; background: linear-gradient(135deg, #2d5016, #7fb069); transition: all 0.3s ease; position: relative; overflow: hidden; }
+
+/* Hover glow */
+.nav-login-btn:hover { transform: translateY(-2px); box-shadow: 0 2px 20px rgba(00, 0, 0, 0.1); }
+
+/* Click effect */
+.nav-login-btn:active { transform: scale(0.96); }
+
+.nav-login-btn::after { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient( 120deg, transparent, rgba(255,255,255,0.3), transparent ); transition: 0.5s; }
+
+.nav-login-btn:hover::after { left: 100%; }
+
 .mobile-menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1001; }
 
 .mobile-menu-toggle span { width: 25px; height: 3px; background: var(--dark); border-radius: 2px; transition: all 0.3s ease; z-index: 1002; }
