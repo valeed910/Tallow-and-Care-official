@@ -142,7 +142,8 @@ function showLoggedInUI(user) {
   <div class="profile-menu">
     <div class="profile-trigger" id="profileTrigger">
       <img class="avatar"
-      src="https://ui-avatars.com/api/?name=${user.name}&background=2e7d32&color=fff">
+        src="https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2e7d32&color=ffffff&size=128"
+        onerror="this.src='https://cdn-icons-png.flaticon.com/512/847/847969.png'">
     </div>
 
     <div class="profile-dropdown" id="profileDropdown">
