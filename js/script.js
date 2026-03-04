@@ -65,6 +65,34 @@ window.onTurnstileSuccess = function (token) {
 
 const products = []; // placeholder data
 console.log("Products coming soon", products);
+/* =========================
+   PROFILE DATA LOAD
+========================= */
+
+if (token) {
+fetch(`${API}/api/auth/me`, {
+  headers: {
+    Authorization: "Bearer " + token
+  }
+})
+.then(res => res.json())
+.then(user => {
+  document.getElementById("profileName").textContent = user.name;
+  document.getElementById("profileEmail").textContent = user.email;
+
+  document.querySelector(".avatar").src =
+    `https://ui-avatars.com/api/?name=${user.name}&background=2e7d32&color=fff`;
+});
+}
+
+/* =========================
+   LOGOUT
+========================= */
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("token");
+  location.reload();
+});
 
 // script.js — cleaned & optimized for Tallow & Care
 document.addEventListener('DOMContentLoaded', () => {
@@ -137,8 +165,40 @@ function showLoggedInUI(user) {
 
   const accountItem = document.createElement("li");
   accountItem.innerHTML = `
-    <a href="#" id="logoutBtn">Logout (${user.name})</a>
+    <li class="profile-menu">
+      <div class="profile-trigger" id="profileTrigger">
+        <img src="https://ui-avatars.com/api/?name=User&background=2e7d32&color=fff" class="avatar">
+      </div>
+
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="profile-info">
+          <strong id="profileName">User</strong>
+          <small id="profileEmail">email@example.com</small>
+        </div>
+
+        <hr>
+
+        <a href="#">My Orders</a>
+        <a href="#">Account Settings</a>
+        <a href="#" id="logoutBtn">Logout</a>
+      </div>
+    </li>
   `;
+
+  // USER DATA PROFILE DROPDOWN SCRIPT
+const trigger = document.getElementById("profileTrigger");
+const dropdown = document.getElementById("profileDropdown");
+
+trigger.addEventListener("click", () => {
+  dropdown.style.display =
+    dropdown.style.display === "block" ? "none" : "block";
+});
+
+document.addEventListener("click", (e) => {
+  if (!trigger.contains(e.target) && !dropdown.contains(e.target)) {
+    dropdown.style.display = "none";
+  }
+});
 
   navLinks.appendChild(accountItem);
 
