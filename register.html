@@ -6,133 +6,357 @@
   <title>Register | Tallow & Care</title>
 
   <style>
-    *{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
 
-    body{ height:100vh; display:flex; justify-content:center; align-items:center; background:linear-gradient(135deg,#0f2027,#203a43,#2c5364); background-size:300% 300%; animation:gradientMove 12s ease infinite; }
+/* BODY */
 
-    @keyframes gradientMove{ 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+body{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#ffffff;
+color:#1f2933;
+padding:20px;
+}
 
-    .register-card{ width:400px; padding:40px; border-radius:20px; backdrop-filter:blur(20px); background:rgba(255,255,255,0.08); box-shadow:0 15px 40px rgba(0,0,0,0.4); color:#fff; text-align:center; }
+/* CARD */
 
-    .register-card h2{ margin-bottom:25px; font-weight:600; letter-spacing:1px; }
+.container{
+width:100%;
+max-width:460px;
+padding:45px 40px;
+border-radius:18px;
+background:#ffffff;
+border:1px solid #e5e7eb;
+box-shadow:0 20px 40px rgba(0,0,0,0.08);
+}
 
-    .input-group{ position:relative; margin-bottom:18px; }
+/* HEADER */
 
-    .input-group input{ width:100%; padding:14px 15px; border:none; outline:none; border-radius:10px; background:rgba(255,255,255,0.12); color:#fff; font-size:14px; transition:0.3s ease; }
+h2{
+font-size:26px;
+margin-bottom:6px;
+font-weight:600;
+color:#2c5016;
+}
 
-    .input-group input:focus{ background:rgba(255,255,255,0.2); box-shadow:0 0 0 2px #00c9a7; }
+.subtitle{
+font-size:14px;
+color:#6b7280;
+margin-bottom:28px;
+}
 
-    .password-strength{ font-size:12px; margin-top:5px; text-align:left; color:#aaa; }
+/* FORM */
 
-    button{ width:100%; padding:14px; border:none; border-radius:12px; background:#00c9a7; color:#000; font-weight:600; font-size:15px; cursor:pointer; transition:0.3s ease; }
+.row{
+display:flex;
+gap:12px;
+margin-bottom:18px;
+}
 
-    button:hover{ background:#00e0b8; transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,201,167,0.4); }
+.input-group{
+width:100%;
+margin-bottom:18px;
+}
 
-    button.loading{ opacity:0.7; cursor:not-allowed; }
+label{
+font-size:12px;
+margin-bottom:6px;
+display:block;
+color:#374151;
+}
 
-    .error-msg{ margin-top:12px; font-size:13px; color:#ff6b6b; display:none; }
+/* INPUT FIELDS */
 
-    .login-link{ margin-top:20px; font-size:13px; }
+input{
+width:100%;
+padding:14px;
+border-radius:10px;
+border:1px solid #d1d5db;
 
-    .login-link a{ color:#00e0b8; text-decoration:none; }
+background:linear-gradient(
+145deg,
+#ffffff,
+#f6faf3
+);
 
-    .login-link a:hover{ text-decoration:underline; }
+color:#111827;
+font-size:14px;
+outline:none;
+transition:0.25s;
+}
+
+input::placeholder{
+color:#9ca3af;
+}
+
+input:focus{
+border-color:#7fb069;
+box-shadow:0 0 0 2px rgba(127,176,105,0.25);
+background:linear-gradient(
+145deg,
+#ffffff,
+#eef6e8
+);
+}
+
+/* BUTTON */
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:10px;
+
+background:linear-gradient(
+135deg,
+#7fb069,
+#5a8441
+);
+
+color:white;
+font-weight:600;
+font-size:15px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(90,132,65,0.35);
+}
+
+/* DIVIDER */
+
+.divider{
+margin:28px 0;
+display:flex;
+align-items:center;
+color:#9ca3af;
+font-size:12px;
+}
+
+.divider::before,
+.divider::after{
+content:"";
+flex:1;
+height:1px;
+background:#e5e7eb;
+}
+
+.divider span{
+margin:0 10px;
+}
+
+/* GOOGLE BUTTON */
+
+.google-btn{
+background:#ffffff;
+border:1px solid #d1d5db;
+padding:13px;
+border-radius:10px;
+font-size:14px;
+color:#374151;
+}
+
+.google-btn:hover{
+background:#f9fafb;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:600px){
+
+.container{
+padding:35px 25px;
+}
+
+.row{
+flex-direction:column;
+}
+
+}
     
   </style>
 </head>
 
 <body>
 
-  <div class="register-card">
-    <h2>Create Account</h2>
 
-    <form id="registerForm">
-      <div class="input-group">
-        <input type="text" id="name" placeholder="Full Name" required>
-      </div>
+<div class="container">
 
-      <div class="input-group">
-        <input type="email" id="email" placeholder="Email Address" required>
-      </div>
+<h2>Create Account</h2>
+<p class="subtitle">Join Tallow & Care and start exploring</p>
 
-      <div class="input-group">
-        <input type="password" id="password" placeholder="Password (min 6 characters)" required>
-        <div class="password-strength" id="strengthText"></div>
-      </div>
+<form>
 
-      <button type="submit" id="registerBtn">Create Account</button>
-      <div class="error-msg" id="errorMsg"></div>
-    </form>
+<div class="row">
 
-    <div class="login-link">
-      Already have an account? <a href="login.html">Login</a>
-    </div>
-  </div>
+<div class="input-group">
+<label>First Name</label>
+<input type="text" required>
+</div>
+
+<div class="input-group">
+<label>Last Name</label>
+<input type="text" required>
+</div>
+
+</div>
+
+<div class="input-group">
+<label>Email Address</label>
+<input type="email" required>
+</div>
+
+<div class="input-group">
+<label>Phone Number</label>
+<input type="tel" required>
+</div>
+
+<div class="input-group">
+<label>Password</label>
+<input type="password" required>
+</div>
+
+<div class="input-group">
+<label>Confirm Password</label>
+<input type="password" required>
+</div>
+
+<button type="submit">
+Create Account →
+</button>
+
+</form>
+
+</div>
 
   <script>
-    const API = "https://api.tallowandcare.in";
+const API = "https://api.tallowandcare.in";
 
-    const form = document.getElementById("registerForm");
-    const registerBtn = document.getElementById("registerBtn");
-    const errorMsg = document.getElementById("errorMsg");
-    const passwordInput = document.getElementById("password");
-    const strengthText = document.getElementById("strengthText");
+const form = document.querySelector("form");
+const registerBtn = document.querySelector("button[type='submit']");
+const errorMsg = document.getElementById("errorMsg");
+
+const firstNameInput = document.getElementById("firstName");
+const lastNameInput = document.getElementById("lastName");
+const emailInput = document.getElementById("email");
+const phoneInput = document.getElementById("phone");
+const passwordInput = document.getElementById("password");
+const confirmPasswordInput = document.getElementById("confirmPassword");
+
+const strengthText = document.getElementById("strengthText");
 
 /* Password strength indicator */
-    passwordInput.addEventListener("input", () => {
-      const value = passwordInput.value;
-      if (value.length < 6) {
-        strengthText.textContent = "Weak password";
-        strengthText.style.color = "#ff6b6b";
-      } else if (value.length < 10) {
-        strengthText.textContent = "Medium strength";
-        strengthText.style.color = "#f1c40f";
-      } else {
-        strengthText.textContent = "Strong password";
-        strengthText.style.color = "#00e0b8";
-      }
+
+passwordInput.addEventListener("input", () => {
+
+  const value = passwordInput.value;
+
+  if (value.length < 6) {
+    strengthText.textContent = "Weak password";
+    strengthText.style.color = "#ff6b6b";
+  } 
+  else if (value.length < 10) {
+    strengthText.textContent = "Medium strength";
+    strengthText.style.color = "#f1c40f";
+  } 
+  else {
+    strengthText.textContent = "Strong password";
+    strengthText.style.color = "#00e0b8";
+  }
+
+});
+
+
+/* Register Form */
+
+form.addEventListener("submit", async (e) => {
+
+  e.preventDefault();
+
+  errorMsg.style.display = "none";
+
+  registerBtn.classList.add("loading");
+  registerBtn.textContent = "Creating...";
+  registerBtn.disabled = true;
+
+  const firstName = firstNameInput.value.trim();
+  const lastName = lastNameInput.value.trim();
+  const email = emailInput.value.trim();
+  const phone = phoneInput.value.trim();
+  const password = passwordInput.value.trim();
+  const confirmPassword = confirmPasswordInput.value.trim();
+
+  /* Check password match */
+
+  if (password !== confirmPassword) {
+
+    errorMsg.textContent = "Passwords do not match";
+    errorMsg.style.display = "block";
+
+    registerBtn.classList.remove("loading");
+    registerBtn.textContent = "Create Account";
+    registerBtn.disabled = false;
+
+    return;
+  }
+
+  const name = `${firstName} ${lastName}`;
+
+  try {
+
+    const res = await fetch(`${API}/api/auth/register`, {
+
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        name,
+        email,
+        phone,
+        password
+      })
+
     });
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    const data = await res.json();
 
-      errorMsg.style.display = "none";
-      registerBtn.classList.add("loading");
-      registerBtn.textContent = "Creating...";
-      registerBtn.disabled = true;
+    if (!res.ok) {
+      throw new Error(data.error || "Registration failed");
+    }
 
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = passwordInput.value.trim();
+    localStorage.setItem("token", data.token);
 
-      try {
-        const res = await fetch(`${API}/api/auth/register`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, password })
-        });
+    document.body.style.opacity = "0";
 
-        const data = await res.json();
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 400);
 
-        if (!res.ok) {
-          throw new Error(data.error || "Registration failed");
-        }
+  }
 
-        localStorage.setItem("token", data.token);
+  catch (err) {
 
-        document.body.style.opacity = "0";
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 400);
+    errorMsg.textContent = err.message;
+    errorMsg.style.display = "block";
 
-      } catch (err) {
-        errorMsg.textContent = err.message;
-        errorMsg.style.display = "block";
-        registerBtn.classList.remove("loading");
-        registerBtn.textContent = "Create Account";
-        registerBtn.disabled = false;
-      }
-    });
+    registerBtn.classList.remove("loading");
+    registerBtn.textContent = "Create Account";
+    registerBtn.disabled = false;
+
+  }
+
+});
   </script>
 
 </body>
